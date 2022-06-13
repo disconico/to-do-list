@@ -8,4 +8,4 @@ function addTaskToLibrary(title, description, dueDate, priority, notes) {
 }
 
 
-export {addTaskToLibrary}
+export {addTaskToLibrary, myLibrary}

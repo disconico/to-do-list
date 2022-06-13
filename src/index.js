@@ -14,5 +14,8 @@ launchApp()
 import { onClick } from './modules/DOMevents';
 onClick()
 
+import { displayTasks } from './modules/DOMevents';
+displayTasks()
+
 
 
