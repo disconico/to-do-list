@@ -1,19 +1,18 @@
-import { addTaskToLibrary, myLibrary } from "./functions";
-import { createForm } from "./form";
+import { addTaskToLibrary, addTaskViaForm, myLibrary } from "./functions";
+import { createForm, deleteForm } from "./form";
 import { Tasks } from "./tasksFactory";
-
-//Assign all elements
 
 function onClick() {
     const addTaskBtn = document.querySelector('.main--button')
     addTaskBtn.addEventListener('click', createForm)
 }
 
-const sport = addTaskToLibrary('Sport', 'Aller au sport')
-const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv')
+const sport = addTaskToLibrary('Sport', 'Aller au sport','23/08/1993','High')
+const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv','','High')
 
 function displayTasks() {
     const taskLibrary = document.querySelector('.task--library')
+    taskLibrary.innerHTML = ''
     myLibrary.forEach((task) => {
 
         console.table(task)
@@ -31,20 +30,45 @@ function displayTasks() {
         taskOutputDescription.innerText = task.description
         taskDiv.appendChild(taskOutputDescription)
 
-
         let taskOutputDueDate = document.createElement('p')
-        if (!task.dueDate === undefined) { 
-        taskOutputDueDate.innerText = task.dueDate
+        if (task.dueDate != undefined) {
+            taskOutputDueDate.innerText = task.dueDate
         } else {
-            taskOutputDueDate.innerText = "No due date"
+            taskOutputDueDate.innerText = ""
         }
         taskDiv.appendChild(taskOutputDueDate)
 
+        let taskOutputPriority = document.createElement('p')
+        taskOutputPriority.innerText = task.priority
+        taskDiv.appendChild(taskOutputPriority)
 
+        let taskOutputProject = document.createElement('p')
+        taskOutputProject.innerText = task.project
+        taskDiv.appendChild(taskOutputProject)
+
+        let taskOutputNotes = document.createElement('p')
+        if (task.notes != undefined) {
+            taskOutputNotes.innerText = task.notes
+        } else {
+            taskOutputNotes.innerText = ""
+        }
+        taskDiv.appendChild(taskOutputNotes)
     })
 }
 
-export { 
-    onClick, 
-    displayTasks
+function processNewTask() {
+    const mainContent = document.querySelector('.main--content')
+    mainContent.addEventListener('click', (e) => {
+        if (e.target.classList.contains('submit--button')) {
+            addTaskViaForm()
+            deleteForm()
+            displayTasks()
+        }
+    })
+}
+
+export {
+    onClick,
+    displayTasks,
+    processNewTask,
 }

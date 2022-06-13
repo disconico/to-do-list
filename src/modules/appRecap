@@ -1,0 +1,19 @@
+import { onClick } from './DOMevents';
+import { launchApp } from './launchApp';
+import { displayTasks, processNewTask } from './DOMevents';
+
+const mainAppFunction = function () { 
+    const content = document.createElement('div')
+    content.classList.add('content')
+    content.setAttribute('id', 'content')
+
+    const body = document.querySelector('body')
+    body.appendChild(content)
+
+    launchApp()
+    onClick()
+    displayTasks()
+    processNewTask()
+}
+
+export {mainAppFunction}

@@ -1,4 +1,4 @@
-
+import {myProjects} from './functions'
 
 function createForm() {
     const mainContent = document.querySelector('.main--content')
@@ -16,7 +16,6 @@ function createForm() {
         newInput.appendChild(input.setInput())
     })
 }
-
 
 class TextInput {
     constructor(description) {
@@ -104,19 +103,50 @@ class PriorityInput {
         input.required = true
 
         const inputOne = document.createElement('option')
-        inputOne.value = "A"
+        inputOne.value = "Low"
         inputOne.innerText = 'Low'
         input.appendChild(inputOne)
 
         const inputTwo = document.createElement('option')
-        inputTwo.value = "B"
+        inputTwo.value = "Medium"
         inputTwo.innerText = 'Medium'
         input.appendChild(inputTwo)
 
         const inputThree = document.createElement('option')
-        inputThree.value = "C"
+        inputThree.value = "High"
         inputThree.innerText = 'High'
         input.appendChild(inputThree)
+
+        return input
+    }
+} 
+
+class ProjectInput {
+    constructor(description) {
+        this.description = description
+    }
+
+    setLabel() {
+        let label = document.createElement('label')
+        label.setAttribute('for', this.description)
+        label.innerText = `Project :`
+        return label
+    }
+
+    setInput() {
+        let input = document.createElement('select')
+        input.name = this.description
+        input.id = this.description
+        input.required = true
+
+        let projectInputs = myProjects
+        projectInputs.forEach(project => {
+            const projectSelection = document.createElement('option')
+            projectSelection.value = project.name
+            projectSelection.innerText = project.name
+            input.appendChild(projectSelection)
+        })
+
 
         return input
     }
@@ -160,8 +190,10 @@ class SubmitInput {
         input.setAttribute('id', this.description)
         input.setAttribute('type', 'button')
         input.innerText = 'Add task'
+
         return input
     }
+
 } 
 
 const formInputs = [
@@ -169,9 +201,16 @@ const formInputs = [
     new DescriptionInput('description'),
     new DueDateInput('due--date'),
     new PriorityInput('priority'),
+    new ProjectInput('project'),
     new NotesInput('notes'),
     new SubmitInput('submit--button'),
 ]
 
+function deleteForm () {
+    const mainContent = document.querySelector('.main--content')
+    const formToDelete = document.querySelector('.new--task--form')
+    mainContent.removeChild(formToDelete)
+}
 
-export {createForm}
+
+export {createForm, deleteForm}

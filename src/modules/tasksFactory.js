@@ -1,11 +1,12 @@
 // Task constructor : 
-const Tasks = (title, description, dueDate, priority, notes) => {
+const Tasks = (title, description, dueDate, priority,project, notes) => {
 
   return {
     title : title,
     description : description,
     dueDate : dueDate,
     priority : priority,
+    project : project,
     notes : notes,
 
     // functions of task :

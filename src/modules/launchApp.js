@@ -1,3 +1,4 @@
+import {myProjects} from './functions'
 
 function createHeader() {
     const header = document.createElement('header')
@@ -26,15 +27,32 @@ function createSideBar() {
     const sideBar = document.createElement('sideBar')
     sideBar.classList.add('sideBar')
 
+    const itemsByDate = document.createElement('div')
+    itemsByDate.classList.add('items--by--date')
+    sideBar.appendChild(itemsByDate)
+
     navItems.forEach(item => {
         let menu = document.createElement('button');
         menu.innerText = item.name;
-        sideBar.appendChild(menu)
+        itemsByDate.appendChild(menu)
     })
     main.appendChild(sideBar)
 
+    const projectList = document.createElement('div')
+    projectList.classList.add('project--list')
+    sideBar.appendChild(projectList)
+
+    navProjects.forEach(project => {
+        let menu = document.createElement('button');
+        menu.innerText = project.name;
+        projectList.appendChild(menu)
+        console.log(project)
+    })
+
     return sideBar
 }
+
+const navProjects = myProjects
 
 const navItems = [
     {
