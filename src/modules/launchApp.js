@@ -51,6 +51,7 @@ function createSideBar() {
 
     const newProjectBtn = document.createElement('button')
     newProjectBtn.type = 'button'
+    newProjectBtn.classList.add('new--project--button')
     newProjectBtn.innerText = 'Add new project'
     projectList.appendChild(newProjectBtn)
 

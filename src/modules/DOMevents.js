@@ -1,5 +1,6 @@
-import { addTaskToLibrary, addTaskViaForm, myLibrary } from "./functions";
+import { addTaskToLibrary, addTaskViaForm, addNewProject, myLibrary, myProjects } from "./functions";
 import { createForm, deleteForm } from "./form";
+import { createProjectInput, deleteProjectInput } from "./newProjectInput";
 
 const sport = addTaskToLibrary('Sport', 'Aller au sport', '23/08/1993', 'High', '', 'false')
 const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '', 'High', '', 'false')
@@ -109,8 +110,33 @@ function displayTasks() {
 
 }
 
+function displayProjects () {
+    const projectLibrary = document.querySelector('.project--list')
+
+    // display library :
+    projectLibrary.innerHTML = ''
+
+    //For each project :
+    myProjects.forEach((project) => {
+
+        let projectBtn = document.createElement('button')
+        projectBtn.classList.add('project--list-btn')
+        projectBtn.id = project.name
+        projectBtn.innerText = project.name
+
+        projectLibrary.appendChild(projectBtn)
+
+    })
+
+    
+
+
+}
+
+
 function eventListeners() {
     const mainContent = document.querySelector('.main--content')
+    const sideBar = document.querySelector('.sideBar')
 
     // Add task button
     const addTaskBtn = document.querySelector('.main--button')
@@ -152,6 +178,25 @@ function eventListeners() {
         }
     })
 
+    // Add new project button
+    sideBar.addEventListener('click', (e) => {
+        if (e.target.classList.contains('new--project--button')) {
+           console.log('caca')
+           createProjectInput()
+           console.log(myProjects)
+        }
+    })
+
+
+    // Triggered when adding new project
+    sideBar.addEventListener('click', (e) => {
+        if (e.target.classList.contains('project--validate--btn')) {
+           console.log('prout')
+        addNewProject()
+           console.log(myProjects)
+           deleteProjectInput()
+        }
+    })
 }
 
 export {

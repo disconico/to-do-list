@@ -5,7 +5,10 @@ let myProjects = []
 let myLibrary = [];
 
 function addNewProject(name, tasks) {
-    let newProject = Projects(name, tasks)
+    let inputName = document.querySelector('#project--id')
+    let newProject = Projects(
+        inputName.value, 
+        tasks)
     myProjects.push(newProject)
 }
 
