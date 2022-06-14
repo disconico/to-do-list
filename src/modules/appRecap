@@ -1,6 +1,6 @@
-import { onClick } from './DOMevents';
 import { launchApp } from './launchApp';
-import { displayTasks, processNewTask, eventListeners } from './DOMevents';
+import { displayTasks, displayProjects, eventListeners } from './DOMevents';
+import { myLibrary } from './functions';
 
 const mainAppFunction = function () { 
     const content = document.createElement('div')
@@ -12,7 +12,9 @@ const mainAppFunction = function () {
 
     launchApp()
     displayTasks()
+    displayProjects()
     eventListeners()
+    console.log(myLibrary)
 }
 
 export {mainAppFunction}

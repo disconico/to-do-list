@@ -3,13 +3,16 @@ import { Projects } from "./projects"
 
 let myProjects = []
 let myLibrary = [];
+let currentProject = ''
+let currentStatus = false
 
 function addNewProject(name, tasks) {
     let inputName = document.querySelector('#project--id')
     let newProject = Projects(
         inputName.value, 
         tasks)
-    myProjects.push(newProject)
+        myProjects.push(newProject)
+    return currentProject = newProject.name
 }
 
 function addDefaultProject(name, tasks) {
@@ -46,10 +49,34 @@ function addTaskViaForm(title, description, dueDate, priority, project, status) 
     console.log(myLibrary)
 }
 
+function filterTasksByProject (projectName) {
+    const tasksFiltered = myLibrary.filter((task) => task.project === projectName
+    )
+    console.log(tasksFiltered)
+}
+
+function setCurrentProject (project) {
+    return currentProject = project
+}
+
+function setCurrentStatusTrue () {
+    return currentStatus = true
+}
+
+function setCurrentStatusFalse () {
+    return currentStatus = false
+}
+
 export {
     addTaskToLibrary,
     addTaskViaForm,
     addNewProject,
+    filterTasksByProject,
+    setCurrentProject,
+    setCurrentStatusFalse,
+    setCurrentStatusTrue,
     myLibrary,
-    myProjects
+    myProjects,
+    currentProject,
+    currentStatus
 }

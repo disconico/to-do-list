@@ -34,6 +34,8 @@ function createSideBar() {
     navItems.forEach(item => {
         let menu = document.createElement('button');
         menu.innerText = item.name;
+        menu.classList.add(item.class)
+        menu.setAttribute('id', item.id)
         itemsByDate.appendChild(menu)
     })
     main.appendChild(sideBar)
@@ -42,33 +44,25 @@ function createSideBar() {
     projectList.classList.add('project--list')
     sideBar.appendChild(projectList)
 
-    navProjects.forEach(project => {
-        let menu = document.createElement('button');
-        menu.innerText = project.name;
-        projectList.appendChild(menu)
-        console.log(project)
-    })
-
-    const newProjectBtn = document.createElement('button')
-    newProjectBtn.type = 'button'
-    newProjectBtn.classList.add('new--project--button')
-    newProjectBtn.innerText = 'Add new project'
-    projectList.appendChild(newProjectBtn)
-
     return sideBar
 }
 
-const navProjects = myProjects
 
 const navItems = [
     {
-        'name': 'Inbox'
+        'name': 'Inbox',
+        'class': 'nav--item',
+        'id': 'inbox'
     },
     {
-        'name': 'Today'
+        'name': 'Today',
+        'class': 'nav--item',
+        'id': 'today'
     },
     {
-        'name': 'This week'
+        'name': 'This week',
+        'class': 'nav--item',
+        'id': 'this--week'
     },
 ]
 
