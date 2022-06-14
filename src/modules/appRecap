@@ -1,6 +1,6 @@
 import { onClick } from './DOMevents';
 import { launchApp } from './launchApp';
-import { displayTasks, processNewTask } from './DOMevents';
+import { displayTasks, processNewTask, eventListeners } from './DOMevents';
 
 const mainAppFunction = function () { 
     const content = document.createElement('div')
@@ -11,9 +11,8 @@ const mainAppFunction = function () {
     body.appendChild(content)
 
     launchApp()
-    onClick()
     displayTasks()
-    processNewTask()
+    eventListeners()
 }
 
 export {mainAppFunction}

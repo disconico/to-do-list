@@ -49,6 +49,11 @@ function createSideBar() {
         console.log(project)
     })
 
+    const newProjectBtn = document.createElement('button')
+    newProjectBtn.type = 'button'
+    newProjectBtn.innerText = 'Add new project'
+    projectList.appendChild(newProjectBtn)
+
     return sideBar
 }
 
@@ -94,8 +99,23 @@ function createTaskLibrary() {
     const taskLibrary = document.createElement('div')
     taskLibrary.classList.add('task--library')
 
-    mainContent.appendChild(taskLibrary)
+    const tasksToDo = document.createElement('div')
+    tasksToDo.classList.add('tasks--to--do')
+    taskLibrary.appendChild(tasksToDo)
 
+    const taskToDoTitle = document.createElement('h5')
+    taskToDoTitle.innerText = 'Tasks to do :'
+    tasksToDo.appendChild(taskToDoTitle)
+
+    const tasksDone = document.createElement('div')
+    tasksDone.classList.add('tasks--done')
+    taskLibrary.appendChild(tasksDone)
+
+    const taskDoneTitle = document.createElement('h5')
+    taskDoneTitle.innerText = 'Tasks done :'
+    tasksDone.appendChild(taskDoneTitle)
+
+    mainContent.appendChild(taskLibrary)
 }
 
 

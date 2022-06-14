@@ -1,25 +1,47 @@
 import { addTaskToLibrary, addTaskViaForm, myLibrary } from "./functions";
 import { createForm, deleteForm } from "./form";
-import { Tasks } from "./tasksFactory";
 
-function onClick() {
-    const addTaskBtn = document.querySelector('.main--button')
-    addTaskBtn.addEventListener('click', createForm)
-}
-
-const sport = addTaskToLibrary('Sport', 'Aller au sport','23/08/1993','High')
-const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv','','High')
+const sport = addTaskToLibrary('Sport', 'Aller au sport', '23/08/1993', 'High', '', 'false')
+const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '', 'High', '', 'false')
 
 function displayTasks() {
     const taskLibrary = document.querySelector('.task--library')
-    taskLibrary.innerHTML = ''
-    myLibrary.forEach((task) => {
 
-        console.table(task)
+    // display library :
+    taskLibrary.innerHTML = ''
+
+    const tasksToDo = document.createElement('div')
+    tasksToDo.classList.add('tasks--to--do')
+    taskLibrary.appendChild(tasksToDo)
+
+    const taskToDoTitle = document.createElement('h5')
+    taskToDoTitle.innerText = 'Tasks to do :'
+    tasksToDo.appendChild(taskToDoTitle)
+
+    const tasksDone = document.createElement('div')
+    tasksDone.classList.add('tasks--done')
+    taskLibrary.appendChild(tasksDone)
+
+    const taskDoneTitle = document.createElement('h5')
+    taskDoneTitle.innerText = 'Tasks done :'
+    tasksDone.appendChild(taskDoneTitle)
+
+    //For each task :
+    myLibrary.forEach((task) => {
 
         let taskDiv = document.createElement('div')
         taskDiv.classList.add('task--div')
-        taskLibrary.appendChild(taskDiv)
+
+        function checkStatusDiv () {
+            if (task.status === 'false'){
+                tasksToDo.appendChild(taskDiv)
+            } else if (task.status === 'true') {
+                tasksDone.appendChild(taskDiv)
+            }
+        }
+
+        checkStatusDiv()
+
         taskDiv.setAttribute('id', myLibrary.indexOf(task))
 
         let taskOutputName = document.createElement('p')
@@ -46,18 +68,56 @@ function displayTasks() {
         taskOutputProject.innerText = task.project
         taskDiv.appendChild(taskOutputProject)
 
-        let taskOutputNotes = document.createElement('p')
-        if (task.notes != undefined) {
-            taskOutputNotes.innerText = task.notes
-        } else {
-            taskOutputNotes.innerText = ""
+        let taskOutputStatus = document.createElement('label')
+        taskOutputStatus.classList.add('switch')
+
+        function checkStatusText () {
+            if (task.status === 'false'){
+                taskOutputStatus.innerText = 'To Do !'
+            } else if (task.status === 'true') {
+                taskOutputStatus.innerText = 'Done !'
+            }
         }
-        taskDiv.appendChild(taskOutputNotes)
+
+        checkStatusText()
+
+        taskDiv.appendChild(taskOutputStatus)
+
+        let taskStatusBtn = document.createElement('input')
+        taskStatusBtn.type = 'checkbox'
+        taskStatusBtn.classList.add('checkbox')
+        taskStatusBtn.setAttribute('id', myLibrary.indexOf(task))
+        taskOutputStatus.appendChild(taskStatusBtn)
+
+        function checkStatus () {
+            if (task.status === 'false'){
+                return
+            } else if (task.status === 'true') {
+                taskStatusBtn.checked = true
+            }
+        }
+        checkStatus()
+
+        let deleteBtn = document.createElement('button')
+        deleteBtn.type = 'button'
+        deleteBtn.classList.add('delete--button')
+        deleteBtn.setAttribute('id', myLibrary.indexOf(task))
+        deleteBtn.innerText = 'Delete task'
+        taskDiv.appendChild(deleteBtn)
+
     })
+
 }
 
-function processNewTask() {
+function eventListeners() {
     const mainContent = document.querySelector('.main--content')
+
+    // Add task button
+    const addTaskBtn = document.querySelector('.main--button')
+    addTaskBtn.addEventListener('click', createForm)
+
+
+    // Triggered when adding new task
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('submit--button')) {
             addTaskViaForm()
@@ -65,10 +125,36 @@ function processNewTask() {
             displayTasks()
         }
     })
+
+    // Triggered when cancelling the new task
+    mainContent.addEventListener('click', (e) => {
+        if (e.target.classList.contains('cancel--button')) {
+            deleteForm()
+            displayTasks()
+        }
+    })
+
+
+    // Triggered when switching task status
+    mainContent.addEventListener('click', (e) => {
+        if (e.target.classList.contains('checkbox')) {
+            myLibrary[e.target.id].toggleStatus()
+            displayTasks()
+        }
+    })
+
+     // Triggered when clicking delete button on task
+     mainContent.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete--button')) {
+            myLibrary.splice(myLibrary[e.target.id],1)
+            displayTasks()
+            console.log(myLibrary)
+        }
+    })
+
 }
 
 export {
-    onClick,
     displayTasks,
-    processNewTask,
+    eventListeners
 }

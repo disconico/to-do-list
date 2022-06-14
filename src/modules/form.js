@@ -152,6 +152,7 @@ class ProjectInput {
     }
 } 
 
+
 class NotesInput {
     constructor(description) {
         this.description = description
@@ -196,14 +197,37 @@ class SubmitInput {
 
 } 
 
+class CancelInput {
+    constructor(description) {
+        this.description = description
+    }
+
+    setLabel() {
+        let label = document.createElement('label')
+        label.setAttribute('for', this.description)
+        return label
+    }
+
+    setInput() {
+        let input = document.createElement('button')
+        input.classList.add(this.description)
+        input.setAttribute('id', this.description)
+        input.setAttribute('type', 'button')
+        input.innerText = 'Cancel'
+
+        return input
+    }
+
+} 
+
 const formInputs = [
     new TextInput('name'),
     new DescriptionInput('description'),
     new DueDateInput('due--date'),
     new PriorityInput('priority'),
     new ProjectInput('project'),
-    new NotesInput('notes'),
     new SubmitInput('submit--button'),
+    new CancelInput('cancel--button'),
 ]
 
 function deleteForm () {

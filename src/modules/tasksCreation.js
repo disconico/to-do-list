@@ -1,5 +1,5 @@
 // Task constructor : 
-const Tasks = (title, description, dueDate, priority,project, notes) => {
+const Tasks = (title, description, dueDate, priority,project, status = 'false') => {
 
   return {
     title : title,
@@ -7,7 +7,7 @@ const Tasks = (title, description, dueDate, priority,project, notes) => {
     dueDate : dueDate,
     priority : priority,
     project : project,
-    notes : notes,
+    status : status,
 
     // functions of task :
     setTitle (newTitle) {
@@ -42,12 +42,16 @@ const Tasks = (title, description, dueDate, priority,project, notes) => {
         this.priority = newPriority
     },
 
-    getNotes () {
-        return this.notes
+    getStatus () {
+        return this.status
     },
 
-    setNotes (newNotes) {
-        this.notes = newNotes
+    toggleStatus () {
+        if (this.status === 'false') {
+            this.status = 'true'
+        } else if (this.status === 'true'){
+            this.status = 'false'
+        }
     },
    }
 }
