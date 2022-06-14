@@ -1,5 +1,6 @@
 import { Tasks } from "./tasksCreation";
-import { Projects } from "./projects"
+import { Projects } from "./projects";
+import { format, formatDistance, formatRelative, subDays, isToday } from 'date-fns'
 
 let myProjects = []
 let myLibrary = [];
@@ -12,7 +13,7 @@ function addNewProject(name, tasks) {
         inputName.value, 
         tasks)
         myProjects.push(newProject)
-    return currentProject = newProject.name
+    currentProject = newProject.name
 }
 
 function addDefaultProject(name, tasks) {
@@ -40,7 +41,7 @@ function addTaskViaForm(title, description, dueDate, priority, project, status) 
     let newTask = Tasks(
         inputTitle.value,
         inputDescription.value,
-        inputDueDate.value,
+        new Date (inputDueDate.value),
         inputPriority.value,
         inputProject.value,
     )
@@ -54,6 +55,8 @@ function filterTasksByProject (projectName) {
     )
     console.log(tasksFiltered)
 }
+
+
 
 function setCurrentProject (project) {
     return currentProject = project

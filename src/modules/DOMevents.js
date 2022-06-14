@@ -15,9 +15,10 @@ import {
 
 import { createForm, deleteForm } from "./form";
 import { createProjectInput, deleteProjectInput } from "./newProjectInput";
+import { format, formatDistance, formatDistanceToNow, formatRelative, subDays } from 'date-fns'
 
-const sport = addTaskToLibrary('Sport', 'Aller au sport', '23/08/1993', 'High', 'Favorites', 'false')
-const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '', 'High', 'Default project', 'false')
+const sport = addTaskToLibrary('Sport', 'Aller au sport', new Date(), 'High', 'Favorites', 'false')
+const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'High', 'Default project', 'false')
 
 function displayTasks() {
     const taskLibrary = document.querySelector('.task--library')
@@ -69,7 +70,10 @@ function displayTasks() {
 
         let taskOutputDueDate = document.createElement('p')
         if (task.dueDate != undefined) {
-            taskOutputDueDate.innerText = task.dueDate
+            let dateToDisplay = format(new Date(task.dueDate), 'PPP')
+            let dateToTodayDisplay = 
+            formatDistanceToNow(new Date(task.dueDate), {addSuffix: true})
+            taskOutputDueDate.innerText = `${dateToDisplay} - ${dateToTodayDisplay}`
         } else {
             taskOutputDueDate.innerText = ""
         }
@@ -179,7 +183,10 @@ function displayTasksFiltered(currentProject) {
 
         let taskOutputDueDate = document.createElement('p')
         if (task.dueDate != undefined) {
-            taskOutputDueDate.innerText = task.dueDate
+            let dateToDisplay = format(new Date(task.dueDate), 'PPP')
+            let dateToTodayDisplay = 
+            formatDistanceToNow(new Date(task.dueDate), {addSuffix: true})
+            taskOutputDueDate.innerText = `${dateToDisplay} - ${dateToTodayDisplay}`
         } else {
             taskOutputDueDate.innerText = ""
         }
