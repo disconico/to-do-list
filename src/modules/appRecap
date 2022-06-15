@@ -11,7 +11,7 @@ const mainAppFunction = function () {
     body.appendChild(content)
 
     launchApp()
-    displayTasks()
+    displayTasks('')
     displayProjects()
     eventListeners()
     console.log(myLibrary)

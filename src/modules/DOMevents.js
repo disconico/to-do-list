@@ -4,23 +4,26 @@ import {
     addNewProject,
     filterTasksByProject,
     setCurrentProject,
-    setCurrentStatusFalse,
-    setCurrentStatusTrue,
+    setcurrentProjectStatusFalse,
+    setcurrentProjectStatusTrue,
+    setcurrentDateStatusFalse,
+    setcurrentDateStatusTrue,
     myLibrary,
     myProjects,
     currentProject,
-    currentStatus
+    currentProjectStatus,
+    currentDateStatus
 }
     from "./functions";
 
 import { createForm, deleteForm } from "./form";
 import { createProjectInput, deleteProjectInput } from "./newProjectInput";
-import { format, formatDistance, formatDistanceToNow, formatRelative, subDays } from 'date-fns'
+import { format, formatDistance, formatDistanceToNow, formatRelative, isToday, subDays, toDate, parseISO, parse, isSameWeek } from 'date-fns'
 
 const sport = addTaskToLibrary('Sport', 'Aller au sport', new Date(), 'High', 'Favorites', 'false')
 const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'High', 'Default project', 'false')
 
-function displayTasks() {
+function displayTasks(method, project, date) {
     const taskLibrary = document.querySelector('.task--library')
 
     // display library :
@@ -42,8 +45,31 @@ function displayTasks() {
     taskDoneTitle.innerText = 'Tasks done :'
     tasksDone.appendChild(taskDoneTitle)
 
+    let myMethodToDisplay = method
+    let myProjectToDisplay = project
+    let myDateToDisplay = date
+    let myLibraryFiltered = []
+
+    function checkMethod () {
+        if (myMethodToDisplay === '') {
+            return myLibraryFiltered = myLibrary
+            
+        } else if (myMethodToDisplay === 'project') {
+            return myLibraryFiltered = myLibrary.filter((task) => task.project === myProjectToDisplay
+            )
+        } else if (myMethodToDisplay === 'date') {
+            if (myDateToDisplay === 'today') {
+                return myLibraryFiltered = myLibrary.filter((task) => (isToday(task.dueDate)))
+            } else if (myDateToDisplay === 'thisWeek') {
+                return myLibraryFiltered = myLibrary.filter((task) => (isSameWeek(task.dueDate, new Date())))
+            }
+        }
+    }
+
+    checkMethod()
+
     //For each task :
-    myLibrary.forEach((task) => {
+    myLibraryFiltered.forEach((task) => {
 
         let taskDiv = document.createElement('div')
         taskDiv.classList.add('task--div')
@@ -69,13 +95,14 @@ function displayTasks() {
         taskDiv.appendChild(taskOutputDescription)
 
         let taskOutputDueDate = document.createElement('p')
-        if (task.dueDate != undefined) {
-            let dateToDisplay = format(new Date(task.dueDate), 'PPP')
-            let dateToTodayDisplay = 
-            formatDistanceToNow(new Date(task.dueDate), {addSuffix: true})
-            taskOutputDueDate.innerText = `${dateToDisplay} - ${dateToTodayDisplay}`
+        if (task.dueDate != '') {
+            task.setDueDate(new Date(task.dueDate))
+            let dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted()
+            taskOutputDueDate.innerText = dateToDisplay
         } else {
-            taskOutputDueDate.innerText = ""
+            task.setDueDate(new Date())
+            let dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted()
+            taskOutputDueDate.innerText = dateToDisplay
         }
         taskDiv.appendChild(taskOutputDueDate)
 
@@ -128,118 +155,6 @@ function displayTasks() {
 
 }
 
-// Display a filtered library
-function displayTasksFiltered(currentProject) {
-    const taskLibrary = document.querySelector('.task--library')
-
-    // display library :
-    taskLibrary.innerHTML = ''
-
-    const tasksToDo = document.createElement('div')
-    tasksToDo.classList.add('tasks--to--do')
-    taskLibrary.appendChild(tasksToDo)
-
-    const taskToDoTitle = document.createElement('h5')
-    taskToDoTitle.innerText = 'Tasks to do :'
-    tasksToDo.appendChild(taskToDoTitle)
-
-    const tasksDone = document.createElement('div')
-    tasksDone.classList.add('tasks--done')
-    taskLibrary.appendChild(tasksDone)
-
-    const taskDoneTitle = document.createElement('h5')
-    taskDoneTitle.innerText = 'Tasks done :'
-    tasksDone.appendChild(taskDoneTitle)
-
-    //For each task :
-
-    let libraryFiltered = myLibrary.filter((task) => task.project === currentProject
-    )
-
-    libraryFiltered.forEach((task) => {
-
-        let taskDiv = document.createElement('div')
-        taskDiv.classList.add('task--div')
-
-        function checkStatusDiv() {
-            if (task.status === 'false') {
-                tasksToDo.appendChild(taskDiv)
-            } else if (task.status === 'true') {
-                tasksDone.appendChild(taskDiv)
-            }
-        }
-
-        checkStatusDiv()
-
-        taskDiv.setAttribute('id', myLibrary.indexOf(task))
-
-        let taskOutputName = document.createElement('p')
-        taskOutputName.innerText = task.title
-        taskDiv.appendChild(taskOutputName)
-
-        let taskOutputDescription = document.createElement('p')
-        taskOutputDescription.innerText = task.description
-        taskDiv.appendChild(taskOutputDescription)
-
-        let taskOutputDueDate = document.createElement('p')
-        if (task.dueDate != undefined) {
-            let dateToDisplay = format(new Date(task.dueDate), 'PPP')
-            let dateToTodayDisplay = 
-            formatDistanceToNow(new Date(task.dueDate), {addSuffix: true})
-            taskOutputDueDate.innerText = `${dateToDisplay} - ${dateToTodayDisplay}`
-        } else {
-            taskOutputDueDate.innerText = ""
-        }
-        taskDiv.appendChild(taskOutputDueDate)
-
-        let taskOutputPriority = document.createElement('p')
-        taskOutputPriority.innerText = task.priority
-        taskDiv.appendChild(taskOutputPriority)
-
-        let taskOutputProject = document.createElement('p')
-        taskOutputProject.innerText = task.project
-        taskDiv.appendChild(taskOutputProject)
-
-        let taskOutputStatus = document.createElement('label')
-        taskOutputStatus.classList.add('switch')
-
-        function checkStatusText() {
-            if (task.status === 'false') {
-                taskOutputStatus.innerText = 'To Do !'
-            } else if (task.status === 'true') {
-                taskOutputStatus.innerText = 'Done !'
-            }
-        }
-
-        checkStatusText()
-
-        taskDiv.appendChild(taskOutputStatus)
-
-        let taskStatusBtn = document.createElement('input')
-        taskStatusBtn.type = 'checkbox'
-        taskStatusBtn.classList.add('checkbox')
-        taskStatusBtn.setAttribute('id', myLibrary.indexOf(task))
-        taskOutputStatus.appendChild(taskStatusBtn)
-
-        function checkStatus() {
-            if (task.status === 'false') {
-                return
-            } else if (task.status === 'true') {
-                taskStatusBtn.checked = true
-            }
-        }
-        checkStatus()
-
-        let deleteBtn = document.createElement('button')
-        deleteBtn.type = 'button'
-        deleteBtn.classList.add('delete--button')
-        deleteBtn.setAttribute('id', myLibrary.indexOf(task))
-        deleteBtn.innerText = 'Delete task'
-        taskDiv.appendChild(deleteBtn)
-
-    })
-
-}
 
 function displayProjects() {
     const projectLibrary = document.querySelector('.project--list')
@@ -267,12 +182,12 @@ function displayProjects() {
 
 }
 
-function checkCurrentStatusAndDisplayTasks () {
-    console.log(currentStatus)
-    if (currentStatus === false) {
-        displayTasks()
-    } else if (currentStatus === true) {
-        displayTasksFiltered(currentProject)
+function checkcurrentProjectStatusAndDisplayTasks () {
+    console.log(currentProjectStatus)
+    if (currentProjectStatus === false) {
+        displayTasks('')
+    } else if (currentProjectStatus === true) {
+        displayTasks('project',currentProject)
     }
 }
 
@@ -290,7 +205,7 @@ function eventListeners() {
         if (e.target.classList.contains('submit--button')) {
             addTaskViaForm()
             deleteForm()
-            checkCurrentStatusAndDisplayTasks()
+            checkcurrentProjectStatusAndDisplayTasks()
         }
     })
 
@@ -298,7 +213,7 @@ function eventListeners() {
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('cancel--button')) {
             deleteForm()
-            checkCurrentStatusAndDisplayTasks()
+            checkcurrentProjectStatusAndDisplayTasks()
         }
     })
 
@@ -307,7 +222,7 @@ function eventListeners() {
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('checkbox')) {
             myLibrary[e.target.id].toggleStatus()
-            checkCurrentStatusAndDisplayTasks()
+            checkcurrentProjectStatusAndDisplayTasks()
         }
     })
 
@@ -315,7 +230,7 @@ function eventListeners() {
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete--button')) {
             myLibrary.splice(myLibrary[e.target.id], 1)
-            checkCurrentStatusAndDisplayTasks()
+            checkcurrentProjectStatusAndDisplayTasks()
             console.log(myLibrary)
         }
     })
@@ -337,28 +252,43 @@ function eventListeners() {
             console.log(myProjects)
             deleteProjectInput()
             displayProjects()
-            setCurrentStatusTrue()
-            checkCurrentStatusAndDisplayTasks()
+            setcurrentProjectStatusTrue()
+            checkcurrentProjectStatusAndDisplayTasks()
         }
     })
 
     //Clicking existing project 
     sideBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('project--list-btn')) {
-            setCurrentStatusTrue()
+            setcurrentProjectStatusTrue()
             setCurrentProject(e.target.id)
-            displayTasksFiltered(currentProject)
+            displayTasks('project', currentProject)
         }
     })
 
     //Inbox button
     sideBar.addEventListener('click', (e) => {
         if (e.target.id === 'inbox') {
-            setCurrentStatusFalse()
-            displayTasks()
+            setcurrentProjectStatusFalse()
+            displayTasks('')
         }
     })
 
+    //Today button
+    sideBar.addEventListener('click', (e) => {
+        if (e.target.id === 'today') {
+            setcurrentProjectStatusFalse()
+            displayTasks('date','','today')
+        }
+    })
+
+    //This week button
+    sideBar.addEventListener('click', (e) => {
+        if (e.target.id === 'this--week') {
+            setcurrentProjectStatusFalse()
+            displayTasks('date','','thisWeek')
+        }
+    })
 
 }
 
