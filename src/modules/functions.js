@@ -51,6 +51,19 @@ function addTaskViaForm(title, description, dueDate, priority, project, status) 
     myLibrary.push(newTask)
 }
 
+
+function editTaskViaForm (task) {
+    let inputTitle = document.querySelector("#name")
+    let inputDescription = document.querySelector("#description")
+    let inputDueDate = document.querySelector("#due--date")
+    let inputPriority = document.querySelector("#priority")
+    let inputProject = document.querySelector("#project")
+
+    task.setTitle(inputTitle.value)
+
+}
+
+
 function filterTasksByProject (projectName) {
     const tasksFiltered = myLibrary.filter((task) => task.project === projectName
     )
@@ -84,6 +97,7 @@ function setcurrentDateStatusFalse () {
 export {
     addTaskToLibrary,
     addTaskViaForm,
+    editTaskViaForm,
     addNewProject,
     filterTasksByProject,
     setCurrentProject,

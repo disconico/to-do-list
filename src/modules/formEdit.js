@@ -1,10 +1,12 @@
-import {myProjects} from './functions'
+import { myLibrary, myProjects } from './functions'
+import { editTarget } from './DOMevents'
+import { format, formatDistance, formatRelative, subDays, isToday, toDate } from 'date-fns'
 
-function createForm() {
+function createEditForm() {
     const mainContent = document.querySelector('.main--content')
     const taskForm = document.createElement('form')
-    taskForm.classList.add('new--task--form')
-    taskForm.innerText = 'Add new task :'
+    taskForm.classList.add('edit--task--form')
+    taskForm.innerText = 'Edit task :'
     mainContent.appendChild(taskForm)
 
     formInputs.forEach(input => {
@@ -27,6 +29,7 @@ class TextInput {
         let label = document.createElement('label')
         label.setAttribute('for', this.description)
         label.innerText = `Name :`
+
         return label
     }
 
@@ -36,9 +39,10 @@ class TextInput {
         input.name = this.description
         input.id = this.description
         input.required = true
+        input.value = editTarget.title
         return input
     }
-} 
+}
 
 class DescriptionInput {
     constructor(description) {
@@ -58,9 +62,10 @@ class DescriptionInput {
         input.name = this.description
         input.id = this.description
         input.required = true
+        input.value = editTarget.description
         return input
     }
-} 
+}
 
 class DueDateInput {
     constructor(description) {
@@ -80,9 +85,10 @@ class DueDateInput {
         input.name = this.description
         input.id = this.description
         input.required = false
+        input.value = toDate(editTarget.dueDate)
         return input
     }
-} 
+}
 
 
 class PriorityInput {
@@ -109,11 +115,25 @@ class PriorityInput {
             const projectInput = document.createElement('option')
             projectInput.value = priority.priority
             projectInput.innerText = priority.priority
+
+            function setSelectedIndex() {
+                for (var i = 0; i < projectPriorityInputs.length; i++) {
+                    if (editTarget.priority === projectInput.innerText) {
+                        projectInput.selected = true;
+                        return
+                    }
+                }
+            }
+            setSelectedIndex()
             input.appendChild(projectInput)
         })
+
+
+
+
         return input
     }
-} 
+}
 
 class ProjectInput {
     constructor(description) {
@@ -138,13 +158,26 @@ class ProjectInput {
             const projectSelection = document.createElement('option')
             projectSelection.value = project.name
             projectSelection.innerText = project.name
+
+            function setSelectedIndex() {
+                for (var i = 0; i < projectInputs.length; i++) {
+                    if (editTarget.project === projectSelection.innerText) {
+                        projectSelection.selected = true;
+                        return
+                    }
+                }
+            }
+
+            setSelectedIndex()
+
+
             input.appendChild(projectSelection)
         })
 
 
         return input
     }
-} 
+}
 
 
 class NotesInput {
@@ -166,7 +199,7 @@ class NotesInput {
         input.required = false
         return input
     }
-} 
+}
 
 class SubmitInput {
     constructor(description) {
@@ -184,12 +217,12 @@ class SubmitInput {
         input.classList.add(this.description)
         input.setAttribute('id', this.description)
         input.setAttribute('type', 'button')
-        input.innerText = 'Add task'
+        input.innerText = 'Edit task'
 
         return input
     }
 
-} 
+}
 
 class CancelInput {
     constructor(description) {
@@ -212,7 +245,7 @@ class CancelInput {
         return input
     }
 
-} 
+}
 
 const formInputs = [
     new TextInput('name'),
@@ -220,7 +253,7 @@ const formInputs = [
     new DueDateInput('due--date'),
     new PriorityInput('priority'),
     new ProjectInput('project'),
-    new SubmitInput('submit--button'),
+    new SubmitInput('submit--edit--button'),
     new CancelInput('cancel--button'),
 ]
 
@@ -232,11 +265,11 @@ const PriorityInputs = (priority) => {
 
 let myPriorityInputs = [PriorityInputs('Low'), PriorityInputs('Medium'), PriorityInputs('High')]
 
-function deleteForm () {
+function deleteEditForm() {
     const mainContent = document.querySelector('.main--content')
-    const formToDelete = document.querySelector('.new--task--form')
+    const formToDelete = document.querySelector('.edit--task--form')
     mainContent.removeChild(formToDelete)
 }
 
 
-export {createForm, deleteForm}
+export { createEditForm, deleteEditForm }

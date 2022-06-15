@@ -1,6 +1,7 @@
 import {
     addTaskToLibrary,
     addTaskViaForm,
+    editTaskViaForm,
     addNewProject,
     filterTasksByProject,
     setCurrentProject,
@@ -20,6 +21,7 @@ import {
 
 import { createForm, deleteForm } from "./form";
 import { createProjectInput, deleteProjectInput } from "./newProjectInput";
+import { createEditForm , deleteEditForm} from "./formEdit";
 import { format, formatDistance, formatDistanceToNow, formatRelative, isToday, subDays, toDate, parseISO, parse, isSameWeek } from 'date-fns'
 
 const sport = addTaskToLibrary('Sport', 'Aller au sport', new Date(), 'High', 'Favorites', 'false')
@@ -59,6 +61,7 @@ function displayTasks(method, project, date) {
     let myProjectToDisplay = project
     let myDateToDisplay = date
     let myLibraryFiltered = []
+
 
     function checkMethod () {
         if (myMethodToDisplay === '') {
@@ -106,11 +109,9 @@ function displayTasks(method, project, date) {
 
         let taskOutputDueDate = document.createElement('p')
         if (task.dueDate != '') {
-            task.setDueDate(task.dueDate)
             let dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted()
             taskOutputDueDate.innerText = dateToDisplay
         } else {
-            task.setDueDate(new Date())
             let dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted()
             taskOutputDueDate.innerText = dateToDisplay
         }
@@ -161,6 +162,13 @@ function displayTasks(method, project, date) {
         deleteBtn.innerText = 'Delete task'
         taskDiv.appendChild(deleteBtn)
 
+        let editBtn = document.createElement('button')
+        editBtn.type = 'button'
+        editBtn.classList.add('edit--button')
+        editBtn.setAttribute('id', myLibrary.indexOf(task))
+        editBtn.innerText = 'Edit task'
+        taskDiv.appendChild(editBtn)
+
     })
 
 }
@@ -202,6 +210,11 @@ function checkcurrentProjectStatusAndDisplayTasks () {
     } else if (currentDateStatus === true) {
         displayTasks('date','',currentDateFilter)
     }
+}
+
+let editTarget = {}
+function setEditTarget (newEditTarget) {
+    return editTarget = newEditTarget
 }
 
 function eventListeners() {
@@ -248,6 +261,29 @@ function eventListeners() {
             console.log(myLibrary)
         }
     })
+
+    // Triggered when clicking edit button on task
+    mainContent.addEventListener('click', (e) => {
+        if (e.target.classList.contains('edit--button')) {
+            console.log(myLibrary[e.target.id])
+            setEditTarget(myLibrary[e.target.id])
+            console.log(editTarget)
+            createEditForm(myLibrary[e.target.id])
+        }
+    })
+
+     // Triggered when validating task edit
+     mainContent.addEventListener('click', (e) => {
+        if (e.target.classList.contains('submit--edit--button')) {
+            console.log('edit')
+            editTaskViaForm(editTarget)
+            console.log(myLibrary)
+            deleteEditForm()
+            checkcurrentProjectStatusAndDisplayTasks()
+            // myLibrary.forEach((task) => console.log(task.dueDate))
+        }
+    })
+
 
     // Add new project button
     sideBar.addEventListener('click', (e) => {
@@ -316,5 +352,6 @@ function eventListeners() {
 export {
     displayTasks,
     displayProjects,
-    eventListeners
+    eventListeners,
+    editTarget
 }
