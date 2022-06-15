@@ -34,7 +34,7 @@ const Tasks = (title, description, dueDate, priority,project, status = 'false') 
 
     getDateFormatted(newDate) {
         if (this.dueDate === '') {
-            return newDate = new Date()
+            return newDate = format (new Date(), 'dd/MM/yyy')
         } else {
         return newDate = format(new Date(this.dueDate), 'dd/MM/yyyy')
     }
@@ -50,6 +50,10 @@ const Tasks = (title, description, dueDate, priority,project, status = 'false') 
 
     setPriority (newPriority) {
         this.priority = newPriority
+    },
+
+    setProject (newProject) {
+        this.project = newProject
     },
 
     getStatus () {

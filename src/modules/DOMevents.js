@@ -21,8 +21,9 @@ import {
 
 import { createForm, deleteForm } from "./form";
 import { createProjectInput, deleteProjectInput } from "./newProjectInput";
-import { createEditForm , deleteEditForm} from "./formEdit";
+import { createEditForm, deleteEditForm } from "./formEdit";
 import { format, formatDistance, formatDistanceToNow, formatRelative, isToday, subDays, toDate, parseISO, parse, isSameWeek } from 'date-fns'
+import previousMonday from "date-fns/esm/fp/previousMonday/index.js";
 
 const sport = addTaskToLibrary('Sport', 'Aller au sport', new Date(), 'High', 'Favorites', 'false')
 const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'High', 'Default project', 'false')
@@ -63,10 +64,11 @@ function displayTasks(method, project, date) {
     let myLibraryFiltered = []
 
 
-    function checkMethod () {
+
+    function checkMethod() {
         if (myMethodToDisplay === '') {
             return myLibraryFiltered = myLibrary
-            
+
         } else if (myMethodToDisplay === 'project') {
             return myLibraryFiltered = myLibrary.filter((task) => task.project === myProjectToDisplay
             )
@@ -183,12 +185,22 @@ function displayProjects() {
     //For each project :
     myProjects.forEach((project) => {
 
+        let projectDiv = document.createElement('div')
+        projectDiv.classList.add('project--div')
+        projectLibrary.appendChild(projectDiv)
+
         let projectBtn = document.createElement('button')
         projectBtn.classList.add('project--list-btn')
         projectBtn.id = project.name
         projectBtn.innerText = project.name
 
-        projectLibrary.appendChild(projectBtn)
+        let projectRemoveBtn = document.createElement('button')
+        projectRemoveBtn.classList.add('project--remove--btn')
+        projectRemoveBtn.id = myProjects.indexOf(project)
+        projectRemoveBtn.innerText = 'X'
+
+        projectDiv.appendChild(projectBtn)
+        projectDiv.appendChild(projectRemoveBtn)
 
     })
 
@@ -200,21 +212,33 @@ function displayProjects() {
 
 }
 
-function checkcurrentProjectStatusAndDisplayTasks () {
-    console.log({currentProjectStatus})
-    console.log({currentDateStatus})
+function checkcurrentProjectStatusAndDisplayTasks() {
     if (currentProjectStatus === false && currentDateStatus === false) {
         displayTasks('')
     } else if (currentProjectStatus === true) {
-        displayTasks('project',currentProject,'')
+        displayTasks('project', currentProject, '')
     } else if (currentDateStatus === true) {
-        displayTasks('date','',currentDateFilter)
+        displayTasks('date', '', currentDateFilter)
     }
 }
 
 let editTarget = {}
-function setEditTarget (newEditTarget) {
+function setEditTarget(newEditTarget) {
     return editTarget = newEditTarget
+}
+
+let myProjectToDelete = ''
+function setProjectToDelete(target) {
+    return myProjectToDelete = target
+}
+
+function deleteTasksFromProject(projectDeleted) {
+    myLibrary.slice().reverse().forEach((task) => {
+        if (task.project === projectDeleted) {
+            myLibrary.splice([myLibrary.indexOf(task)], 1)
+        }
+    })
+
 }
 
 function eventListeners() {
@@ -226,17 +250,16 @@ function eventListeners() {
     addTaskBtn.addEventListener('click', createForm)
 
 
-    // Triggered when adding new task
+    // Adding new task
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('submit--button')) {
             addTaskViaForm()
             deleteForm()
             checkcurrentProjectStatusAndDisplayTasks()
-            myLibrary.forEach((task) => console.log(task.dueDate))
         }
     })
 
-    // Triggered when cancelling the new task
+    // Cancelling new task
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('cancel--button')) {
             deleteForm()
@@ -245,7 +268,7 @@ function eventListeners() {
     })
 
 
-    // Triggered when switching task status
+    // Switching task status
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('checkbox')) {
             myLibrary[e.target.id].toggleStatus()
@@ -253,43 +276,45 @@ function eventListeners() {
         }
     })
 
-    // Triggered when clicking delete button on task
+    // Delete task
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('delete--button')) {
-            myLibrary.splice(myLibrary[e.target.id], 1)
+            myLibrary.splice(e.target.id, 1)
             checkcurrentProjectStatusAndDisplayTasks()
-            console.log(myLibrary)
         }
     })
 
-    // Triggered when clicking edit button on task
+    // Edit button on task
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('edit--button')) {
-            console.log(myLibrary[e.target.id])
             setEditTarget(myLibrary[e.target.id])
-            console.log(editTarget)
             createEditForm(myLibrary[e.target.id])
         }
     })
 
-     // Triggered when validating task edit
-     mainContent.addEventListener('click', (e) => {
+    // Triggered when validating task edit
+    mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('submit--edit--button')) {
-            console.log('edit')
             editTaskViaForm(editTarget)
-            console.log(myLibrary)
             deleteEditForm()
             checkcurrentProjectStatusAndDisplayTasks()
-            // myLibrary.forEach((task) => console.log(task.dueDate))
         }
     })
+
+    // Triggered when cancelling task edit
+    mainContent.addEventListener('click', (e) => {
+        if (e.target.classList.contains('cancel--edit--button')) {
+            deleteEditForm()
+            checkcurrentProjectStatusAndDisplayTasks()
+        }
+    })
+
 
 
     // Add new project button
     sideBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('new--project--button')) {
             createProjectInput()
-            console.log(myProjects)
         }
     })
 
@@ -297,9 +322,7 @@ function eventListeners() {
     // Triggered when adding new project
     sideBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('project--validate--btn')) {
-            console.log('prout')
             addNewProject()
-            console.log(myProjects)
             deleteProjectInput()
             displayProjects()
             setcurrentDateStatusFalse()
@@ -318,6 +341,19 @@ function eventListeners() {
         }
     })
 
+
+    // Triggered when clicking delete button project
+    sideBar.addEventListener('click', (e) => {
+        if (e.target.classList.contains('project--remove--btn')) {
+            setProjectToDelete(myProjects[e.target.id].name)
+            console.log(myProjectToDelete)
+            myProjects.splice(e.target.id, 1)
+            deleteTasksFromProject(myProjectToDelete)
+            checkcurrentProjectStatusAndDisplayTasks()
+            displayProjects()
+        }
+    })
+
     //Inbox button
     sideBar.addEventListener('click', (e) => {
         if (e.target.id === 'inbox') {
@@ -333,7 +369,7 @@ function eventListeners() {
             setcurrentDateStatusTrue()
             setcurrentProjectStatusFalse()
             setCurrentDateFilter(e.target.id)
-            displayTasks('date','',currentDateFilter)
+            displayTasks('date', '', currentDateFilter)
         }
     })
 
@@ -343,7 +379,7 @@ function eventListeners() {
             setcurrentDateStatusTrue()
             setcurrentProjectStatusFalse()
             setCurrentDateFilter('thisWeek')
-            displayTasks('date','',currentDateFilter)
+            displayTasks('date', '', currentDateFilter)
         }
     })
 

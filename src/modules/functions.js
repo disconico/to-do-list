@@ -2,12 +2,22 @@ import { Tasks } from "./tasksCreation";
 import { Projects } from "./projects";
 import { format, formatDistance, formatRelative, subDays, isToday } from 'date-fns'
 
+
 let myProjects = []
 let myLibrary = [];
 let currentProject = ''
 let currentDateFilter = ''
 let currentProjectStatus = false
 let currentDateStatus = false
+
+//Setting library to be stored in local storage
+function setData() {
+    localStorage.setItem(`myLibrary`, JSON.stringify(myLibrary));
+}
+
+function cleanStorage () {
+    localStorage.clear()
+}
 
 function addNewProject(name, tasks) {
     let inputName = document.querySelector('#project--id')
@@ -60,6 +70,18 @@ function editTaskViaForm (task) {
     let inputProject = document.querySelector("#project")
 
     task.setTitle(inputTitle.value)
+    task.setDescription(inputDescription.value)
+
+    function checkDate () {
+        if (inputDueDate.value === '') {
+            task.setDueDate(new Date())
+        } else {
+            task.setDueDate(inputDueDate.value)
+        }
+    }
+    checkDate()
+    task.setPriority(inputPriority.value)
+    task.setProject(inputProject.value)
 
 }
 
@@ -94,6 +116,18 @@ function setcurrentDateStatusFalse () {
     return currentDateStatus = false
 }
 
+//pulls books from local storage when page is refreshed
+function restore (){
+    if(!localStorage.myLibrary) {
+        console.log('caca')
+    }else {
+        let objects = localStorage.getItem('myLibrary') // gets information from local storage to use in below loop to create DOM/display
+        objects = JSON.parse(objects);
+        myLibrary = objects;
+        console.log('ca MARCHE')
+    }
+    }
+
 export {
     addTaskToLibrary,
     addTaskViaForm,
@@ -106,6 +140,7 @@ export {
     setcurrentDateStatusFalse,
     setcurrentDateStatusTrue,
     setCurrentDateFilter,
+    restore,
     myLibrary,
     myProjects,
     currentProject,

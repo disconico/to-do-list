@@ -104,7 +104,6 @@ class PriorityInput {
         input.required = true
 
         let projectPriorityInputs = myPriorityInputs
-        console.log(projectPriorityInputs)
         projectPriorityInputs.forEach((priority) => {
             const projectInput = document.createElement('option')
             projectInput.value = priority.priority
@@ -132,6 +131,11 @@ class ProjectInput {
         input.name = this.description
         input.id = this.description
         input.required = true
+
+        let noProjectInput = document.createElement('option')
+        noProjectInput.value = 'No project'
+        noProjectInput.innerText = 'No project'
+        input.appendChild(noProjectInput)
 
         let projectInputs = myProjects
         projectInputs.forEach(project => {
