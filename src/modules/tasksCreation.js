@@ -1,4 +1,4 @@
-import { format } from "date-fns"
+import { format , toDate} from "date-fns"
 
 // Task constructor : 
 const Tasks = (title, description, dueDate, priority,project, status = 'false') => {
@@ -32,16 +32,16 @@ const Tasks = (title, description, dueDate, priority,project, status = 'false') 
         return this.dueDate
     },
 
-    getDateFormatted() {
+    getDateFormatted(newDate) {
         if (this.dueDate === '') {
-            return this.dueDate = new Date()
+            return newDate = new Date()
         } else {
-        return format(new Date(this.dueDate), 'dd/MM/yyyy')
+        return newDate = format(new Date(this.dueDate), 'dd/MM/yyyy')
     }
     },
 
     setDueDate (newDate) {
-        this.dueDate = newDate
+        this.dueDate = toDate(new Date(newDate))
     },
 
     getPriority () {

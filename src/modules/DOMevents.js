@@ -8,9 +8,11 @@ import {
     setcurrentProjectStatusTrue,
     setcurrentDateStatusFalse,
     setcurrentDateStatusTrue,
+    setCurrentDateFilter,
     myLibrary,
     myProjects,
     currentProject,
+    currentDateFilter,
     currentProjectStatus,
     currentDateStatus
 }
@@ -44,6 +46,14 @@ function displayTasks(method, project, date) {
     const taskDoneTitle = document.createElement('h5')
     taskDoneTitle.innerText = 'Tasks done :'
     tasksDone.appendChild(taskDoneTitle)
+
+    myLibrary.forEach((task) => {
+        if (task.dueDate != '') {
+            task.setDueDate(task.dueDate)
+        } else {
+            task.setDueDate(new Date())
+        }
+    })
 
     let myMethodToDisplay = method
     let myProjectToDisplay = project
@@ -96,7 +106,7 @@ function displayTasks(method, project, date) {
 
         let taskOutputDueDate = document.createElement('p')
         if (task.dueDate != '') {
-            task.setDueDate(new Date(task.dueDate))
+            task.setDueDate(task.dueDate)
             let dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted()
             taskOutputDueDate.innerText = dateToDisplay
         } else {
@@ -183,11 +193,14 @@ function displayProjects() {
 }
 
 function checkcurrentProjectStatusAndDisplayTasks () {
-    console.log(currentProjectStatus)
-    if (currentProjectStatus === false) {
+    console.log({currentProjectStatus})
+    console.log({currentDateStatus})
+    if (currentProjectStatus === false && currentDateStatus === false) {
         displayTasks('')
     } else if (currentProjectStatus === true) {
-        displayTasks('project',currentProject)
+        displayTasks('project',currentProject,'')
+    } else if (currentDateStatus === true) {
+        displayTasks('date','',currentDateFilter)
     }
 }
 
@@ -206,6 +219,7 @@ function eventListeners() {
             addTaskViaForm()
             deleteForm()
             checkcurrentProjectStatusAndDisplayTasks()
+            myLibrary.forEach((task) => console.log(task.dueDate))
         }
     })
 
@@ -252,6 +266,7 @@ function eventListeners() {
             console.log(myProjects)
             deleteProjectInput()
             displayProjects()
+            setcurrentDateStatusFalse()
             setcurrentProjectStatusTrue()
             checkcurrentProjectStatusAndDisplayTasks()
         }
@@ -260,6 +275,7 @@ function eventListeners() {
     //Clicking existing project 
     sideBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('project--list-btn')) {
+            setcurrentDateStatusFalse()
             setcurrentProjectStatusTrue()
             setCurrentProject(e.target.id)
             displayTasks('project', currentProject)
@@ -270,6 +286,7 @@ function eventListeners() {
     sideBar.addEventListener('click', (e) => {
         if (e.target.id === 'inbox') {
             setcurrentProjectStatusFalse()
+            setcurrentDateStatusFalse()
             displayTasks('')
         }
     })
@@ -277,16 +294,20 @@ function eventListeners() {
     //Today button
     sideBar.addEventListener('click', (e) => {
         if (e.target.id === 'today') {
+            setcurrentDateStatusTrue()
             setcurrentProjectStatusFalse()
-            displayTasks('date','','today')
+            setCurrentDateFilter(e.target.id)
+            displayTasks('date','',currentDateFilter)
         }
     })
 
     //This week button
     sideBar.addEventListener('click', (e) => {
         if (e.target.id === 'this--week') {
+            setcurrentDateStatusTrue()
             setcurrentProjectStatusFalse()
-            displayTasks('date','','thisWeek')
+            setCurrentDateFilter('thisWeek')
+            displayTasks('date','',currentDateFilter)
         }
     })
 

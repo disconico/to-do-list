@@ -5,6 +5,7 @@ import { format, formatDistance, formatRelative, subDays, isToday } from 'date-f
 let myProjects = []
 let myLibrary = [];
 let currentProject = ''
+let currentDateFilter = ''
 let currentProjectStatus = false
 let currentDateStatus = false
 
@@ -48,7 +49,6 @@ function addTaskViaForm(title, description, dueDate, priority, project, status) 
     )
 
     myLibrary.push(newTask)
-    console.log(myLibrary)
 }
 
 function filterTasksByProject (projectName) {
@@ -68,6 +68,11 @@ function setcurrentProjectStatusTrue () {
 function setcurrentProjectStatusFalse () {
     return currentProjectStatus = false
 }
+
+function setCurrentDateFilter (dateFilter) {
+    return currentDateFilter = dateFilter
+}
+
 function setcurrentDateStatusTrue () {
     return currentDateStatus = true
 }
@@ -86,9 +91,11 @@ export {
     setcurrentProjectStatusTrue,
     setcurrentDateStatusFalse,
     setcurrentDateStatusTrue,
+    setCurrentDateFilter,
     myLibrary,
     myProjects,
     currentProject,
+    currentDateFilter,
     currentProjectStatus,
     currentDateStatus
 }
