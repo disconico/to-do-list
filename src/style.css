@@ -724,6 +724,27 @@ margin-right: 2.5%;
   /* display: grid; */
 }
 
+.task--library h5{
+  font-family: 'pacifico';
+  font-size: 32px;
+  margin-bottom: 8px;
+  margin-top: 8px;
+
+}
+
+.tasks--to--do,
+.tasks--done {
+  display: grid;
+  gap: 8px;
+}
+
+.output--description {
+  font-style: italic;
+  font-weight: lighter;
+  font-size: 14px;
+}
+
+
 .delete--button {
   cursor: pointer;
   height:  20px;

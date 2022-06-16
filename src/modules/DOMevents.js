@@ -101,15 +101,18 @@ function displayTasks(method, project, date) {
 
         taskDiv.setAttribute('id', myLibrary.indexOf(task))
 
-        let taskOutputName = document.createElement('p')
+        let taskOutputName = document.createElement('div')
+        taskOutputName.classList.add('output--name')
         taskOutputName.innerText = task.title
         taskDiv.appendChild(taskOutputName)
 
-        let taskOutputDescription = document.createElement('p')
+        let taskOutputDescription = document.createElement('div')
+        taskOutputDescription.classList.add('output--description')
         taskOutputDescription.innerText = task.description
         taskDiv.appendChild(taskOutputDescription)
 
-        let taskOutputDueDate = document.createElement('p')
+        let taskOutputDueDate = document.createElement('div')
+        taskOutputDueDate.classList.add('output--due--date')
         if (task.dueDate != '') {
             let dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted()
             taskOutputDueDate.innerText = dateToDisplay
@@ -119,28 +122,34 @@ function displayTasks(method, project, date) {
         }
         taskDiv.appendChild(taskOutputDueDate)
 
-        let taskOutputPriority = document.createElement('p')
+        let taskOutputPriority = document.createElement('div')
+        taskOutputPriority.classList.add('output--priority')
         taskOutputPriority.innerText = task.priority
         taskDiv.appendChild(taskOutputPriority)
 
-        let taskOutputProject = document.createElement('p')
+        let taskOutputProject = document.createElement('div')
+        taskOutputProject.classList.add('output--project')
         taskOutputProject.innerText = task.project
         taskDiv.appendChild(taskOutputProject)
+
+        let taskOutputStatusDiv = document.createElement('div')
+        taskOutputStatusDiv.classList.add('output--status')
+        taskDiv.appendChild(taskOutputStatusDiv)
 
         let taskOutputStatus = document.createElement('label')
         taskOutputStatus.classList.add('switch')
 
         function checkStatusText() {
             if (task.status === 'false') {
-                taskOutputStatus.innerText = 'To Do !'
+                taskOutputStatus.innerText = 'Mark as done :  '
             } else if (task.status === 'true') {
-                taskOutputStatus.innerText = 'Done !'
+                taskOutputStatus.innerText = 'Mark as to do :  '
             }
         }
 
         checkStatusText()
 
-        taskDiv.appendChild(taskOutputStatus)
+        taskOutputStatusDiv.appendChild(taskOutputStatus)
 
         let taskStatusBtn = document.createElement('input')
         taskStatusBtn.type = 'checkbox'
@@ -157,17 +166,31 @@ function displayTasks(method, project, date) {
         }
         checkStatus()
 
+        let taskSlider = document.createElement('span')
+        taskSlider.classList.add('slider')
+        taskSlider.classList.add('round')
+        taskOutputStatus.appendChild(taskSlider)
+
+
+        let deleteBtnDiv = document.createElement('div')
+        deleteBtnDiv.classList.add('output--delete')
+        taskDiv.appendChild(deleteBtnDiv)
+
         let deleteBtn = document.createElement('button')
         deleteBtn.type = 'button'
         deleteBtn.classList.add('delete--button')
         deleteBtn.setAttribute('id', myLibrary.indexOf(task))
-        taskDiv.appendChild(deleteBtn)
+        deleteBtnDiv.appendChild(deleteBtn)
+
+        let editBtnDiv = document.createElement('div')
+        editBtnDiv.classList.add('output--edit')
+        taskDiv.appendChild(editBtnDiv)
 
         let editBtn = document.createElement('button')
         editBtn.type = 'button'
         editBtn.classList.add('edit--button')
         editBtn.setAttribute('id', myLibrary.indexOf(task))
-        taskDiv.appendChild(editBtn)
+        editBtnDiv.appendChild(editBtn)
 
     })
 
