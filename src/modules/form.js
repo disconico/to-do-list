@@ -4,12 +4,29 @@ function createForm() {
     const mainContent = document.querySelector('.main--content')
     const taskForm = document.createElement('form')
     taskForm.classList.add('new--task--form')
-    taskForm.innerText = 'Add new task :'
     mainContent.appendChild(taskForm)
+
+    const formTitle = document.createElement('div')
+    formTitle.classList.add('form--title')
+    formTitle.innerText = 'Add New Task'
+    taskForm.appendChild(formTitle)
 
     formInputs.forEach(input => {
         const newInput = document.createElement('div')
         taskForm.appendChild(newInput)
+        newInput.classList.add(input.description)
+
+        newInput.appendChild(input.setLabel())
+        newInput.appendChild(input.setInput())
+    })
+
+    const inputBtnDiv = document.createElement('div')
+    inputBtnDiv.classList.add('input--btn--div')
+    taskForm.appendChild(inputBtnDiv)
+
+    btnInputs.forEach(input => {
+        const newInput = document.createElement('div')
+        inputBtnDiv.appendChild(newInput)
         newInput.classList.add(input.description)
 
         newInput.appendChild(input.setLabel())
@@ -188,7 +205,7 @@ class SubmitInput {
         input.classList.add(this.description)
         input.setAttribute('id', this.description)
         input.setAttribute('type', 'button')
-        input.innerText = 'Add task'
+        input.innerText = '✓'
 
         return input
     }
@@ -211,7 +228,7 @@ class CancelInput {
         input.classList.add(this.description)
         input.setAttribute('id', this.description)
         input.setAttribute('type', 'button')
-        input.innerText = 'Cancel'
+        input.innerText = '×'
 
         return input
     }
@@ -224,6 +241,9 @@ const formInputs = [
     new DueDateInput('due--date'),
     new PriorityInput('priority'),
     new ProjectInput('project'),
+]
+
+const btnInputs = [
     new SubmitInput('submit--button'),
     new CancelInput('cancel--button'),
 ]

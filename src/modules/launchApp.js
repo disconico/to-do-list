@@ -116,11 +116,20 @@ function createMainContent() {
 
 function createMainButtons() {
     const mainContent = document.querySelector('.main--content')
+
+    const mainContentDiv = document.createElement('div')
+    mainContentDiv.classList.add('main--content--div')
+    mainContent.appendChild(mainContentDiv)
+
     const mainBtn = document.createElement('button')
     mainBtn.classList.add('main--button')
-    mainBtn.innerText = 'Add task'
+    mainBtn.innerText = '+'
+    mainContentDiv.appendChild(mainBtn)
 
-    mainContent.appendChild(mainBtn)
+    const mainBtnTxt = document.createElement('p')
+    mainBtnTxt.classList.add('main--button--txt')
+    mainBtnTxt.innerText = 'Add Task'
+    mainContentDiv.appendChild(mainBtnTxt)
 
     return mainBtn
 }

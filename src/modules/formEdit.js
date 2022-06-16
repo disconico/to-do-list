@@ -6,8 +6,12 @@ function createEditForm() {
     const mainContent = document.querySelector('.main--content')
     const taskForm = document.createElement('form')
     taskForm.classList.add('edit--task--form')
-    taskForm.innerText = 'Edit task :'
     mainContent.appendChild(taskForm)
+
+    const formTitle = document.createElement('div')
+    formTitle.classList.add('form--title')
+    formTitle.innerText = 'Edit Task'
+    taskForm.appendChild(formTitle)
 
     formInputs.forEach(input => {
         const newInput = document.createElement('div')
@@ -17,6 +21,21 @@ function createEditForm() {
         newInput.appendChild(input.setLabel())
         newInput.appendChild(input.setInput())
     })
+
+
+    const inputBtnDiv = document.createElement('div')
+    inputBtnDiv.classList.add('input--btn--div')
+    taskForm.appendChild(inputBtnDiv)
+
+    btnInputs.forEach(input => {
+        const newInput = document.createElement('div')
+        inputBtnDiv.appendChild(newInput)
+        newInput.classList.add(input.description)
+
+        newInput.appendChild(input.setLabel())
+        newInput.appendChild(input.setInput())
+    })
+
 }
 
 
@@ -257,6 +276,9 @@ const formInputs = [
     new DueDateInput('due--date'),
     new PriorityInput('priority'),
     new ProjectInput('project'),
+]
+
+const btnInputs = [
     new SubmitInput('submit--edit--button'),
     new CancelInput('cancel--edit--button'),
 ]

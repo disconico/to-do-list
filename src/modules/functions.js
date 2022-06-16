@@ -24,6 +24,9 @@ function addNewProject(name, tasks) {
     let newProject = Projects(
         inputName.value, 
         tasks)
+        if (inputName.value === '') {
+            newProject.setName('New Project')
+        }
         myProjects.push(newProject)
     currentProject = newProject.name
 }

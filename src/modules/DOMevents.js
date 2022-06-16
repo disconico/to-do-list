@@ -161,14 +161,12 @@ function displayTasks(method, project, date) {
         deleteBtn.type = 'button'
         deleteBtn.classList.add('delete--button')
         deleteBtn.setAttribute('id', myLibrary.indexOf(task))
-        deleteBtn.innerText = 'Delete task'
         taskDiv.appendChild(deleteBtn)
 
         let editBtn = document.createElement('button')
         editBtn.type = 'button'
         editBtn.classList.add('edit--button')
         editBtn.setAttribute('id', myLibrary.indexOf(task))
-        editBtn.innerText = 'Edit task'
         taskDiv.appendChild(editBtn)
 
     })
@@ -333,6 +331,13 @@ function eventListeners() {
             setcurrentDateStatusFalse()
             setcurrentProjectStatusTrue()
             checkcurrentProjectStatusAndDisplayTasks()
+        }
+    })
+
+    //Canceling input 
+    sideBar.addEventListener('click', (e) => {
+        if (e.target.classList.contains('project--cancel--btn')) {
+            deleteProjectInput()
         }
     })
 
