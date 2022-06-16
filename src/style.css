@@ -381,11 +381,36 @@
   
   
   /* #endregion */ 
+:root {
+  --background-grey-color : #F8F7FA;
+  --background-blue-color : #6081B3;
+  --hover-blue-color :#203d6a ;
+  --font-color : rgb(32,32,32)
+}
+
+@font-face {
+  font-family: 'SF-regular';
+  src: url(../src/assets/fonts/San\ Francisco\ Regular.ttf);
+
+  font-family: 'SF-bold';
+  src: url(../src/assets/fonts/San\ Francisco\ Bold.ttf);
+
+  font-family: 'pacifico';
+  src: url(../src/assets/fonts/Pacifico-Regular.ttf);
+}
+
+@keyframes rainbow { 
+  0%{background-position:0% 50%}
+  50%{background-position:100% 25%}
+  100%{background-position:0% 50%}
+}
 
   html,
   body {
       margin: 0;
       padding: 0;
+      font-family: 'SF-regular', sans-serif;
+      color: var(--font-color);
   }
 
   body {
@@ -398,7 +423,7 @@
     width: 100vw;
    
     display: grid;
-    grid-template-rows: min-content 1fr min-content;
+    grid-template-rows: 1fr min-content;
 }
 
 .main {
@@ -407,10 +432,25 @@
 }
 
 .sideBar{
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+  background-color: var(--background-grey-color);
+    display: grid;
+    grid-template-rows: 70px max-content max-content 1fr;
+    gap: 1rem;
+    padding: 0.5rem;
+    border-right: 0.5px solid rgb(238, 236, 236);
+    
+}
+
+.main--title--p {
+  height: 100%;
+  font-family: 'pacifico', sans-serif;
+  /* background-image: repeating-linear-gradient(to left,yellow, orange, red, yellow); */
+  /* text-align: center; */
+  /* background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 8s ease infinite;; */
+  font-size: 30px;
 }
 
 .items--by--date,
@@ -418,12 +458,91 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
-    margin-left: 10px;
+    gap: 8px;
 }
 
-.mainContent {
-    border: 1px solid black;
+.item--by--date--title,
+.project--list--title {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: 'SF-bold';
+  height: max-content;
+}
+
+
+
+
+.items--by--date button,
+.project--list-btn {
+  color: var(--font-color);
+  /* width: 100px; */
+    padding: 5px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-family: 'SF-regular', sans-serif;
+    text-align: left;
+}
+
+.items--by--date button:hover,
+.project--list-btn:hover{
+transition: 0.3s;
+cursor: pointer;
+/* font-family: 'SF-bold'; */
+font-weight: bold;
+color: var(--hover-blue-color);
+} 
+
+.items--by--date button:active,
+.project--list-btn:active {
+transition: 0.3s;
+font-family: 'SF-regular';
+font-weight: 600;
+color: var(--font-color);
+} 
+
+.dateDiv {
+  display: flex;
+  gap : 5px;
+  justify-content: center;
+
+}
+
+.dateDiv img {
+  height: 24px;
+  width: 24px;
+}
+
+
+.project--div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.project--remove--btn{
+  color: red;
+  height:  14px;
+  width: 14px;
+  background: url(../src/assets/images/remove.png);
+  border: none;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-position-x: 98%;
+  background-position-y: center; */
+}
+
+.project--remove--btn:hover {
+  transition: 0.2s;
+  height: 18px;
+  width: 18px;
+}
+
+
+
+.main--content {
+  padding: 0.5rem;
 }
 
 
@@ -431,14 +550,14 @@
 
 /* Footer */
 .footer {
-    height: 60px;
+    height: 44px;
     display: flex;
     color: whitesmoke;
     justify-content: center;
     align-items: center;
     gap: 10px;
     border-top: 3px solid var(--golden-color);
-    background-color: black;
+    background-color: var(--background-blue-color);
 }
 
 .footer img {

@@ -27,22 +27,55 @@ function createSideBar() {
     const sideBar = document.createElement('sideBar')
     sideBar.classList.add('sideBar')
 
+    const mainTitleDiv = document.createElement('div')
+    mainTitleDiv.classList.add('main--title')
+    sideBar.appendChild(mainTitleDiv)
+
+    const mainTitleP = document.createElement('p')
+    mainTitleP.classList.add('main--title--p')
+    mainTitleP.innerText = 'My To-Do'
+    mainTitleDiv.appendChild(mainTitleP)
+
+
+
     const itemsByDate = document.createElement('div')
     itemsByDate.classList.add('items--by--date')
     sideBar.appendChild(itemsByDate)
 
+    const itemsByDateTitle = document.createElement('p')
+    itemsByDateTitle.classList.add('item--by--date--title')
+    itemsByDateTitle.innerText = 'Home'
+    itemsByDate.appendChild(itemsByDateTitle)
+
     navItems.forEach(item => {
+        let dateDiv = document.createElement('div')
+        dateDiv.classList.add('dateDiv')
+        itemsByDate.appendChild(dateDiv)
+
+        let img = document.createElement('img')
+        img.classList.add('date--div--img')
+        img.src = item.source
+        dateDiv.appendChild(img)
+
         let menu = document.createElement('button');
         menu.innerText = item.name;
         menu.classList.add(item.class)
         menu.setAttribute('id', item.id)
-        itemsByDate.appendChild(menu)
+        dateDiv.appendChild(menu)
     })
+  
     main.appendChild(sideBar)
 
     const projectList = document.createElement('div')
     projectList.classList.add('project--list')
     sideBar.appendChild(projectList)
+
+
+    const sideDiv = document.createElement('div')
+    sideDiv.classList.add('side--div')
+    sideBar.appendChild(sideDiv)
+    
+
 
     return sideBar
 }
@@ -50,19 +83,22 @@ function createSideBar() {
 
 const navItems = [
     {
-        'name': 'Inbox',
+        'name': `Inbox`,
         'class': 'nav--item',
-        'id': 'inbox'
+        'id': 'inbox',
+        'source' : '../src/assets/images/inbox.png'
     },
     {
         'name': 'Today',
         'class': 'nav--item',
-        'id': 'today'
+        'id': 'today',
+        'source' : '../src/assets/images/star.png'
     },
     {
         'name': 'This week',
         'class': 'nav--item',
-        'id': 'this--week'
+        'id': 'this--week',
+        'source' : '../src/assets/images/calendar.png'
     },
 ]
 
@@ -140,7 +176,7 @@ function createFooter() {
 function launchApp() {
     const content = document.getElementById('content')
 
-    content.appendChild(createHeader())
+    // content.appendChild(createHeader())
     content.appendChild(createMain())
     createSideBar()
     createMainContent()

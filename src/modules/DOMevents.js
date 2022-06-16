@@ -182,6 +182,12 @@ function displayProjects() {
     // display library :
     projectLibrary.innerHTML = ''
 
+
+    const projectListTitle = document.createElement('p')
+    projectListTitle.innerText = 'Projects'
+    projectListTitle.classList.add('project--list--title')
+    projectLibrary.appendChild(projectListTitle)
+
     //For each project :
     myProjects.forEach((project) => {
 
@@ -197,7 +203,6 @@ function displayProjects() {
         let projectRemoveBtn = document.createElement('button')
         projectRemoveBtn.classList.add('project--remove--btn')
         projectRemoveBtn.id = myProjects.indexOf(project)
-        projectRemoveBtn.innerText = 'X'
 
         projectDiv.appendChild(projectBtn)
         projectDiv.appendChild(projectRemoveBtn)
