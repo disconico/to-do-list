@@ -36,6 +36,8 @@ function createSideBar() {
     mainTitleP.innerText = 'My To-Do'
     mainTitleDiv.appendChild(mainTitleP)
 
+    
+
 
 
     const itemsByDate = document.createElement('div')

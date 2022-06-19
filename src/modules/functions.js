@@ -40,6 +40,7 @@ const defaultProject = addDefaultProject('Default project', Tasks('Sport', 'Alle
 
 const defaultProjectTwo = addDefaultProject('Favorites', Tasks('Sport', 'Aller au sport','23/08/1993','High','false')) 
 
+
 function addTaskToLibrary(title, description, dueDate, priority, project, status) {
     let newTask = Tasks(title, description, dueDate, priority, project, status);
     myLibrary.push(newTask)

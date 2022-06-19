@@ -26,7 +26,9 @@ import { format, formatDistance, formatDistanceToNow, formatRelative, isToday, s
 import previousMonday from "date-fns/esm/fp/previousMonday/index.js";
 
 const sport = addTaskToLibrary('Sport', 'Aller au sport', new Date(), 'High', 'Favorites', 'false')
-const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'High', 'Default project', 'false')
+const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'Low', 'Default project', 'false')
+const Hello = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'Medium', 'Default project', 'false')
+const hihi = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'High', 'Default project', 'false')
 
 function displayTasks(method, project, date) {
     const taskLibrary = document.querySelector('.task--library')
@@ -38,9 +40,15 @@ function displayTasks(method, project, date) {
     tasksToDo.classList.add('tasks--to--do')
     taskLibrary.appendChild(tasksToDo)
 
+    
     const taskToDoTitle = document.createElement('h5')
     taskToDoTitle.innerText = 'Tasks to do :'
     tasksToDo.appendChild(taskToDoTitle)
+
+    const taskContainerToDo = document.createElement('div')
+    taskContainerToDo.classList.add('task--container')
+    tasksToDo.appendChild(taskContainerToDo)
+
 
     const tasksDone = document.createElement('div')
     tasksDone.classList.add('tasks--done')
@@ -49,6 +57,11 @@ function displayTasks(method, project, date) {
     const taskDoneTitle = document.createElement('h5')
     taskDoneTitle.innerText = 'Tasks done :'
     tasksDone.appendChild(taskDoneTitle)
+
+    const taskContainerDone = document.createElement('div')
+    taskContainerDone.classList.add('task--container')
+    tasksDone.appendChild(taskContainerDone)
+
 
     myLibrary.forEach((task) => {
         if (task.dueDate != '') {
@@ -91,9 +104,9 @@ function displayTasks(method, project, date) {
 
         function checkStatusDiv() {
             if (task.status === 'false') {
-                tasksToDo.appendChild(taskDiv)
+                taskContainerToDo.appendChild(taskDiv)
             } else if (task.status === 'true') {
-                tasksDone.appendChild(taskDiv)
+                taskContainerDone.appendChild(taskDiv)
             }
         }
 
@@ -122,15 +135,16 @@ function displayTasks(method, project, date) {
         }
         taskDiv.appendChild(taskOutputDueDate)
 
-        let taskOutputPriority = document.createElement('div')
-        taskOutputPriority.classList.add('output--priority')
-        taskOutputPriority.innerText = task.priority
-        taskDiv.appendChild(taskOutputPriority)
-
         let taskOutputProject = document.createElement('div')
         taskOutputProject.classList.add('output--project')
         taskOutputProject.innerText = task.project
         taskDiv.appendChild(taskOutputProject)
+
+        let taskOutputPriority = document.createElement('div')
+        taskOutputPriority.classList.add('output--priority')
+        taskOutputPriority.classList.add(task.priority)
+        taskOutputPriority.innerText = task.priority
+        taskDiv.appendChild(taskOutputPriority)
 
         let taskOutputStatusDiv = document.createElement('div')
         taskOutputStatusDiv.classList.add('output--status')
@@ -171,10 +185,13 @@ function displayTasks(method, project, date) {
         taskSlider.classList.add('round')
         taskOutputStatus.appendChild(taskSlider)
 
+        let actionBtn = document.createElement('div')
+        actionBtn.classList.add('action--buttons')
+        taskDiv.appendChild(actionBtn)
 
         let deleteBtnDiv = document.createElement('div')
         deleteBtnDiv.classList.add('output--delete')
-        taskDiv.appendChild(deleteBtnDiv)
+        actionBtn.appendChild(deleteBtnDiv)
 
         let deleteBtn = document.createElement('button')
         deleteBtn.type = 'button'
@@ -184,7 +201,7 @@ function displayTasks(method, project, date) {
 
         let editBtnDiv = document.createElement('div')
         editBtnDiv.classList.add('output--edit')
-        taskDiv.appendChild(editBtnDiv)
+        actionBtn.appendChild(editBtnDiv)
 
         let editBtn = document.createElement('button')
         editBtn.type = 'button'
