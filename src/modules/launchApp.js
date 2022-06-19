@@ -85,7 +85,7 @@ function createSideBar() {
 
 const navItems = [
     {
-        'name': `Inbox`,
+        'name': `All tasks`,
         'class': 'nav--item',
         'id': 'inbox',
         'source' : '../src/assets/images/inbox.png'
