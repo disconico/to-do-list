@@ -382,7 +382,6 @@ function eventListeners() {
     sideBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('project--remove--btn')) {
             setProjectToDelete(myProjects[e.target.id].name)
-            console.log(myProjectToDelete)
             myProjects.splice(e.target.id, 1)
             deleteTasksFromProject(myProjectToDelete)
             checkcurrentProjectStatusAndDisplayTasks()

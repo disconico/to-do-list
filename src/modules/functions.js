@@ -18,47 +18,56 @@ function storeTasks() {
 function storeProjects() {
     let jsonProjects = JSON.stringify(myProjects)
     localStorage.setItem(`myProjects`, jsonProjects)
-    console.log(myProjects)
 }
 
 //Check storage and restore
 function restoreTasks() {
-    if (localStorage.myTasks === '') {
-        console.log('empty storage')
-    } else {
-        console.log(localStorage.myTasks)
-        console.log('Storage not empty - tasks')
-        let tasksFromStorage = localStorage.getItem('myTasks')
-        let parsedTasks = JSON.parse(tasksFromStorage);
-        console.log(parsedTasks)
+    let tasksFromStorage = localStorage.getItem('myTasks')
+    let parsedTasks = ''
 
+    function checkLocalStorageTasks() {
+        if (tasksFromStorage === null) {
+            parsedTasks = JSON.parse(tasksFromStorage)
+            return parsedTasks
+        } else {
+            parsedTasks = Array.from(JSON.parse(tasksFromStorage));
+            return parsedTasks
+        }
+    }
+    checkLocalStorageTasks()
+
+    if (tasksFromStorage === null || parsedTasks.length === 0) {
+        return
+    } else {
         parsedTasks.forEach((task) => {
             addTaskFromStorage(task.title, task.description, task.dueDate, task.priority, task.project, task.status)
         })
-
-        // myLibrary = parsedTasks;
-        console.log(myLibrary)
-        console.log('ca MARCHE - tasks')
         return myLibrary
     }
 }
 
 function restoreProjects() {
-    if (localStorage.myProjects === '') {
-        console.log('empty storage')
-    } else {
-        console.log(localStorage.Projects)
-        console.log('Storage not empty - projects')
-        let projectsFromStorage = localStorage.getItem('myProjects')
-        let parsedProjects = JSON.parse(projectsFromStorage)
-        console.log(parsedProjects)
+    let projectsFromStorage = localStorage.getItem('myProjects')
+    let parsedProjects = ''
 
+    function checkLocalStorageProjects () {
+        if (projectsFromStorage === null) {
+            parsedProjects = JSON.parse(projectsFromStorage)
+            return parsedProjects
+        } else {
+            parsedProjects = Array.from(parsedProjects = JSON.parse(projectsFromStorage))
+            return parsedProjects
+        }
+    }
+
+    checkLocalStorageProjects()
+
+    if (projectsFromStorage === null || parsedProjects.length === 0) {
+        return
+    } else {
         parsedProjects.forEach((project) => {
             addProjectFromStorage(project.name, project.tasks)
         })
-
-        console.log(myProjects)
-        console.log('ca MARCHE - tasks')
         return myProjects
     }
 }
@@ -151,7 +160,6 @@ function editTaskViaForm(task) {
 function filterTasksByProject(projectName) {
     const tasksFiltered = myLibrary.filter((task) => task.project === projectName
     )
-    console.log(tasksFiltered)
 }
 
 function setCurrentProject(project) {
