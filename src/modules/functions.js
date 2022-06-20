@@ -23,7 +23,7 @@ function storeProjects() {
 
 //Check storage and restore
 function restoreTasks() {
-    if (localStorage.myTasks === null) {
+    if (localStorage.myTasks === '') {
         console.log('empty storage')
     } else {
         console.log('Storage not empty - tasks')
@@ -43,7 +43,7 @@ function restoreTasks() {
 }
 
 function restoreProjects() {
-    if (localStorage.myProjects === null) {
+    if (localStorage.myProjects === '') {
         console.log('empty storage')
     } else {
         console.log('Storage not empty - projects')
