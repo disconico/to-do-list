@@ -430,9 +430,14 @@ body {
   box-sizing: border-box;
 }
 
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
 #content {
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  min-width: 100vw;
   display: grid;
   grid-template-rows: 1fr min-content;
 }
@@ -515,11 +520,22 @@ body {
   justify-content: center;
 }
 
-.dateDiv img {
+.date--div--img {
   height: 24px;
   width: 24px;
 }
 
+.date--div--img.inbox {
+  content: url(./assets/images/inbox.png);
+}
+
+.date--div--img.today  {
+  content: url(./assets/images/star.png);
+}
+
+.date--div--img.this--week {
+  content: url(./assets/images/calendar.png);
+}
 
 .project--div {
   width: 100%;
@@ -596,8 +612,6 @@ body {
   opacity: 0.8;
 }
 
-
-
 .input--btn--div .project--cancel--btn {
   background-color: red;
 }
@@ -606,10 +620,10 @@ body {
   opacity: 1;
 }
 
-
 .main--content {
   padding: 0.5rem;
   margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .new--task--form,
@@ -705,14 +719,21 @@ body {
 }
 
 .main--content--div button {
-  height: 2rem;
-  width: 2rem;
+  height: 32px;
+  width: 32px;
   border-radius: 50%;
   border: none;
   background-color: #04AA6D;
   font-size: 1.5rem;
   color: white;
   opacity: 0.8;
+  font-family: Arial, Helvetica, sans-serif;
+  /* text-align: center; */
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* justify-content: center; */
 }
 
 .main--content--div button:hover {

@@ -51,7 +51,7 @@ function createSideBar() {
 
         let img = document.createElement('img')
         img.classList.add('date--div--img')
-        img.src = item.source
+        img.classList.add(item.id)
         dateDiv.appendChild(img)
 
         let menu = document.createElement('button');

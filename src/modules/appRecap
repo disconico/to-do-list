@@ -10,6 +10,12 @@ const mainAppFunction = function () {
     const body = document.querySelector('body')
     body.appendChild(content)
 
+    const head = document.querySelector('head')
+    const icon = document.createElement('link')
+    head.appendChild(icon)
+    icon.rel = 'icon'
+    icon.href = '../src/assets/images/calendar.png'
+
     launchApp()
     restoreTasks()
     restoreProjects()

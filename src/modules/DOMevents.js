@@ -349,7 +349,7 @@ function eventListeners() {
         }
     })
 
-    // Triggered when adding new project
+    // Triggered when adding new project via button
     sideBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('project--validate--btn')) {
             addNewProject()
