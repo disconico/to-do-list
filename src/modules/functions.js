@@ -26,6 +26,7 @@ function restoreTasks() {
     if (localStorage.myTasks === '') {
         console.log('empty storage')
     } else {
+        console.log(localStorage.myTasks)
         console.log('Storage not empty - tasks')
         let tasksFromStorage = localStorage.getItem('myTasks')
         let parsedTasks = JSON.parse(tasksFromStorage);
@@ -46,6 +47,7 @@ function restoreProjects() {
     if (localStorage.myProjects === '') {
         console.log('empty storage')
     } else {
+        console.log(localStorage.Projects)
         console.log('Storage not empty - projects')
         let projectsFromStorage = localStorage.getItem('myProjects')
         let parsedProjects = JSON.parse(projectsFromStorage)
