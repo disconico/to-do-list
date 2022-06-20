@@ -1,8 +1,8 @@
 import { launchApp } from './launchApp';
 import { displayTasks, displayProjects, eventListeners } from './DOMevents';
-import { myLibrary, myProjects, restore } from './functions';
+import { myLibrary, myProjects, restoreTasks, restoreProjects } from './functions';
 
-const mainAppFunction = function () { 
+const mainAppFunction = function () {
     const content = document.createElement('div')
     content.classList.add('content')
     content.setAttribute('id', 'content')
@@ -10,13 +10,12 @@ const mainAppFunction = function () {
     const body = document.querySelector('body')
     body.appendChild(content)
 
-    
     launchApp()
+    restoreTasks()
+    restoreProjects()
     displayTasks('')
     displayProjects()
     eventListeners()
-    restore()
-    console.log(myLibrary)
 }
 
-export {mainAppFunction}
+export { mainAppFunction }

@@ -1,4 +1,4 @@
-import {myProjects} from './functions'
+import { myProjects } from './functions'
 
 function createHeader() {
     const header = document.createElement('header')
@@ -10,7 +10,6 @@ function createHeader() {
     const headerTitle = document.createElement('h1')
     headerTitle.innerText = 'My To-Do'
     header.appendChild(headerTitle)
-
 
     return header
 }
@@ -35,10 +34,6 @@ function createSideBar() {
     mainTitleP.classList.add('main--title--p')
     mainTitleP.innerText = 'My To-Do'
     mainTitleDiv.appendChild(mainTitleP)
-
-    
-
-
 
     const itemsByDate = document.createElement('div')
     itemsByDate.classList.add('items--by--date')
@@ -65,7 +60,7 @@ function createSideBar() {
         menu.setAttribute('id', item.id)
         dateDiv.appendChild(menu)
     })
-  
+
     main.appendChild(sideBar)
 
     const projectList = document.createElement('div')
@@ -76,31 +71,28 @@ function createSideBar() {
     const sideDiv = document.createElement('div')
     sideDiv.classList.add('side--div')
     sideBar.appendChild(sideDiv)
-    
-
 
     return sideBar
 }
-
 
 const navItems = [
     {
         'name': `All tasks`,
         'class': 'nav--item',
         'id': 'inbox',
-        'source' : '../src/assets/images/inbox.png'
+        'source': '../src/assets/images/inbox.png'
     },
     {
         'name': 'Today',
         'class': 'nav--item',
         'id': 'today',
-        'source' : '../src/assets/images/star.png'
+        'source': '../src/assets/images/star.png'
     },
     {
         'name': 'This week',
         'class': 'nav--item',
         'id': 'this--week',
-        'source' : '../src/assets/images/calendar.png'
+        'source': '../src/assets/images/calendar.png'
     },
 ]
 
@@ -187,7 +179,6 @@ function createFooter() {
 function launchApp() {
     const content = document.getElementById('content')
 
-    // content.appendChild(createHeader())
     content.appendChild(createMain())
     createSideBar()
     createMainContent()

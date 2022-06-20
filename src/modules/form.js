@@ -1,4 +1,4 @@
-import {myProjects} from './functions'
+import { myProjects } from './functions'
 
 function createForm() {
     const mainContent = document.querySelector('.main--content')
@@ -52,10 +52,11 @@ class TextInput {
         input.type = 'text'
         input.name = this.description
         input.id = this.description
+        input.maxLength = 16
         input.required = true
         return input
     }
-} 
+}
 
 class DescriptionInput {
     constructor(description) {
@@ -74,10 +75,11 @@ class DescriptionInput {
         input.type = 'text'
         input.name = this.description
         input.id = this.description
+        input.maxLength = 50
         input.required = true
         return input
     }
-} 
+}
 
 class DueDateInput {
     constructor(description) {
@@ -99,7 +101,7 @@ class DueDateInput {
         input.required = false
         return input
     }
-} 
+}
 
 
 class PriorityInput {
@@ -129,7 +131,7 @@ class PriorityInput {
         })
         return input
     }
-} 
+}
 
 class ProjectInput {
     constructor(description) {
@@ -162,10 +164,9 @@ class ProjectInput {
             input.appendChild(projectSelection)
         })
 
-
         return input
     }
-} 
+}
 
 
 class NotesInput {
@@ -187,7 +188,7 @@ class NotesInput {
         input.required = false
         return input
     }
-} 
+}
 
 class SubmitInput {
     constructor(description) {
@@ -209,8 +210,7 @@ class SubmitInput {
 
         return input
     }
-
-} 
+}
 
 class CancelInput {
     constructor(description) {
@@ -232,8 +232,7 @@ class CancelInput {
 
         return input
     }
-
-} 
+}
 
 const formInputs = [
     new TextInput('name'),
@@ -256,11 +255,10 @@ const PriorityInputs = (priority) => {
 
 let myPriorityInputs = [PriorityInputs('Low'), PriorityInputs('Medium'), PriorityInputs('High')]
 
-function deleteForm () {
+function deleteForm() {
     const mainContent = document.querySelector('.main--content')
     const formToDelete = document.querySelector('.new--task--form')
     mainContent.removeChild(formToDelete)
 }
 
-
-export {createForm, deleteForm}
+export { createForm, deleteForm }

@@ -15,7 +15,11 @@ import {
     currentProject,
     currentDateFilter,
     currentProjectStatus,
-    currentDateStatus
+    currentDateStatus,
+    storeTasks,
+    storeProjects,
+    restoreTasks,
+    restoreProjects
 }
     from "./functions";
 
@@ -24,11 +28,6 @@ import { createProjectInput, deleteProjectInput } from "./newProjectInput";
 import { createEditForm, deleteEditForm } from "./formEdit";
 import { format, formatDistance, formatDistanceToNow, formatRelative, isToday, subDays, toDate, parseISO, parse, isSameWeek } from 'date-fns'
 import previousMonday from "date-fns/esm/fp/previousMonday/index.js";
-
-const sport = addTaskToLibrary('Sport', 'Aller au sport', new Date(), 'High', 'Favorites', 'false')
-const coiffeur = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'Low', 'Default project', 'false')
-const Hello = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'Medium', 'Default project', 'false')
-const hihi = addTaskToLibrary('Coiffeur', 'Prendre rdv', '2022-07-22', 'High', 'Default project', 'false')
 
 function displayTasks(method, project, date) {
     const taskLibrary = document.querySelector('.task--library')
@@ -40,7 +39,6 @@ function displayTasks(method, project, date) {
     tasksToDo.classList.add('tasks--to--do')
     taskLibrary.appendChild(tasksToDo)
 
-    
     const taskToDoTitle = document.createElement('h5')
     taskToDoTitle.innerText = 'Tasks to do :'
     tasksToDo.appendChild(taskToDoTitle)
@@ -62,7 +60,6 @@ function displayTasks(method, project, date) {
     taskContainerDone.classList.add('task--container')
     tasksDone.appendChild(taskContainerDone)
 
-
     myLibrary.forEach((task) => {
         if (task.dueDate != '') {
             task.setDueDate(task.dueDate)
@@ -75,8 +72,6 @@ function displayTasks(method, project, date) {
     let myProjectToDisplay = project
     let myDateToDisplay = date
     let myLibraryFiltered = []
-
-
 
     function checkMethod() {
         if (myMethodToDisplay === '') {
@@ -208,18 +203,14 @@ function displayTasks(method, project, date) {
         editBtn.classList.add('edit--button')
         editBtn.setAttribute('id', myLibrary.indexOf(task))
         editBtnDiv.appendChild(editBtn)
-
     })
-
 }
-
 
 function displayProjects() {
     const projectLibrary = document.querySelector('.project--list')
 
     // display library :
     projectLibrary.innerHTML = ''
-
 
     const projectListTitle = document.createElement('p')
     projectListTitle.innerText = 'Projects'
@@ -244,7 +235,6 @@ function displayProjects() {
 
         projectDiv.appendChild(projectBtn)
         projectDiv.appendChild(projectRemoveBtn)
-
     })
 
     const newProjectBtn = document.createElement('button')
@@ -281,7 +271,7 @@ function deleteTasksFromProject(projectDeleted) {
             myLibrary.splice([myLibrary.indexOf(task)], 1)
         }
     })
-
+    storeTasks()
 }
 
 function eventListeners() {
@@ -291,7 +281,6 @@ function eventListeners() {
     // Add task button
     const addTaskBtn = document.querySelector('.main--button')
     addTaskBtn.addEventListener('click', createForm)
-
 
     // Adding new task
     mainContent.addEventListener('click', (e) => {
@@ -310,12 +299,12 @@ function eventListeners() {
         }
     })
 
-
     // Switching task status
     mainContent.addEventListener('click', (e) => {
         if (e.target.classList.contains('checkbox')) {
             myLibrary[e.target.id].toggleStatus()
             checkcurrentProjectStatusAndDisplayTasks()
+            storeTasks()
         }
     })
 
@@ -324,6 +313,7 @@ function eventListeners() {
         if (e.target.classList.contains('delete--button')) {
             myLibrary.splice(e.target.id, 1)
             checkcurrentProjectStatusAndDisplayTasks()
+            storeTasks()
         }
     })
 
@@ -352,15 +342,12 @@ function eventListeners() {
         }
     })
 
-
-
     // Add new project button
     sideBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('new--project--button')) {
             createProjectInput()
         }
     })
-
 
     // Triggered when adding new project
     sideBar.addEventListener('click', (e) => {
@@ -391,7 +378,6 @@ function eventListeners() {
         }
     })
 
-
     // Triggered when clicking delete button project
     sideBar.addEventListener('click', (e) => {
         if (e.target.classList.contains('project--remove--btn')) {
@@ -401,6 +387,7 @@ function eventListeners() {
             deleteTasksFromProject(myProjectToDelete)
             checkcurrentProjectStatusAndDisplayTasks()
             displayProjects()
+            storeProjects()
         }
     })
 

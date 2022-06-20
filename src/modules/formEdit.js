@@ -35,9 +35,7 @@ function createEditForm() {
         newInput.appendChild(input.setLabel())
         newInput.appendChild(input.setInput())
     })
-
 }
-
 
 class TextInput {
     constructor(description) {
@@ -58,6 +56,7 @@ class TextInput {
         input.name = this.description
         input.id = this.description
         input.required = true
+        input.maxLength = 16
         input.value = editTarget.title
         return input
     }
@@ -80,6 +79,7 @@ class DescriptionInput {
         input.type = 'text'
         input.name = this.description
         input.id = this.description
+        input.maxLength = 50
         input.required = true
         input.value = editTarget.description
         return input
@@ -146,9 +146,6 @@ class PriorityInput {
             input.appendChild(projectInput)
         })
 
-
-
-
         return input
     }
 }
@@ -190,18 +187,13 @@ class ProjectInput {
                     }
                 }
             }
-
             setSelectedIndex()
-
 
             input.appendChild(projectSelection)
         })
-
-
         return input
     }
 }
-
 
 class NotesInput {
     constructor(description) {
@@ -244,7 +236,6 @@ class SubmitInput {
 
         return input
     }
-
 }
 
 class CancelInput {
@@ -267,7 +258,6 @@ class CancelInput {
 
         return input
     }
-
 }
 
 const formInputs = [
@@ -296,6 +286,5 @@ function deleteEditForm() {
     const formToDelete = document.querySelector('.edit--task--form')
     mainContent.removeChild(formToDelete)
 }
-
 
 export { createEditForm, deleteEditForm }
