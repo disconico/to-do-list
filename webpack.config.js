@@ -37,7 +37,8 @@ module.exports = {
             maxSize: 8 * 1024, // 8kb
           },
         },
-        generator: { // If emitting file, the file path is
+        generator: {
+          // If emitting file, the file path is
           filename: 'fonts/[hash][ext][query]',
         },
       },

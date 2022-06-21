@@ -34,7 +34,4 @@ function deleteProjectInput() {
   projectList.removeChild(projectInput);
 }
 
-export {
-  createProjectInput,
-  deleteProjectInput,
-};
+export { createProjectInput, deleteProjectInput };

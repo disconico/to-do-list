@@ -38,7 +38,6 @@ function restoreTasks() {
 
   // eslint-disable-next-line no-empty
   if (tasksFromStorage === null || parsedTasks.length === 0) {
-
   } else {
     parsedTasks.forEach((task) => {
       // eslint-disable-next-line no-use-before-define
@@ -48,7 +47,7 @@ function restoreTasks() {
         task.dueDate,
         task.priority,
         task.project,
-        task.status,
+        task.status
       );
     });
     return myLibrary;
@@ -65,7 +64,9 @@ function restoreProjects() {
       parsedProjects = JSON.parse(projectsFromStorage);
       return parsedProjects;
     }
-    parsedProjects = Array.from(parsedProjects = JSON.parse(projectsFromStorage));
+    parsedProjects = Array.from(
+      (parsedProjects = JSON.parse(projectsFromStorage))
+    );
     return parsedProjects;
   }
 
@@ -73,7 +74,6 @@ function restoreProjects() {
 
   // eslint-disable-next-line no-empty
   if (projectsFromStorage === null || parsedProjects.length === 0) {
-
   } else {
     parsedProjects.forEach((project) => {
       // eslint-disable-next-line no-use-before-define
@@ -85,10 +85,7 @@ function restoreProjects() {
 
 function addNewProject(name, tasks) {
   const inputName = document.querySelector('#project--id');
-  const newProject = Projects(
-    inputName.value,
-    tasks,
-  );
+  const newProject = Projects(inputName.value, tasks);
   if (inputName.value === '') {
     newProject.setName('New Project');
   }
@@ -109,13 +106,27 @@ function addProjectFromStorage(name, tasks) {
   storeProjects();
 }
 
-function addTaskToLibrary(title, description, dueDate, priority, project, status) {
+function addTaskToLibrary(
+  title,
+  description,
+  dueDate,
+  priority,
+  project,
+  status
+) {
   const newTask = Tasks(title, description, dueDate, priority, project, status);
   myLibrary.push(newTask);
   storeTasks();
 }
 
-function addTaskFromStorage(title, description, dueDate, priority, project, status) {
+function addTaskFromStorage(
+  title,
+  description,
+  dueDate,
+  priority,
+  project,
+  status
+) {
   const newTask = Tasks(title, description, dueDate, priority, project, status);
   myLibrary.push(newTask);
   storeTasks();
@@ -133,7 +144,7 @@ function addTaskViaForm() {
     inputDescription.value,
     inputDueDate.value,
     inputPriority.value,
-    inputProject.value,
+    inputProject.value
   );
 
   myLibrary.push(newTask);

@@ -4,7 +4,14 @@
 import { format, toDate } from 'date-fns';
 
 // Task constructor :
-const Tasks = (title, description, dueDate, priority, project, status = 'false') => ({
+const Tasks = (
+  title,
+  description,
+  dueDate,
+  priority,
+  project,
+  status = 'false'
+) => ({
   title,
   description,
   dueDate,
@@ -35,10 +42,10 @@ const Tasks = (title, description, dueDate, priority, project, status = 'false')
 
   getDateFormatted(newDate) {
     if (this.dueDate === '') {
-      return newDate = format(new Date(), 'dd/MM/yyy');
+      return (newDate = format(new Date(), 'dd/MM/yyy'));
     } else {
       // eslint-disable-next-line no-unused-vars
-      return newDate = format(new Date(this.dueDate), 'dd/MM/yyyy');
+      return (newDate = format(new Date(this.dueDate), 'dd/MM/yyyy'));
     }
   },
 

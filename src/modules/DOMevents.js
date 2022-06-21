@@ -1,6 +1,4 @@
-import {
-  isToday, isSameWeek,
-} from 'date-fns';
+import { isToday, isSameWeek } from 'date-fns';
 import {
   addTaskViaForm,
   editTaskViaForm,
@@ -19,8 +17,7 @@ import {
   currentDateFilter,
   currentProjectStatus,
   currentDateStatus,
-}
-  from './functions';
+} from './functions';
 
 import { createForm, deleteForm } from './form';
 import { createProjectInput, deleteProjectInput } from './newProjectInput';
@@ -73,13 +70,20 @@ function displayTasks(method, project, date) {
   function checkMethod() {
     if (myMethodToDisplay === '') {
       myLibraryFiltered = myLibrary;
-    } if (myMethodToDisplay === 'project') {
-      myLibraryFiltered = myLibrary.filter((task) => task.project === myProjectToDisplay);
-    } if (myMethodToDisplay === 'date') {
+    }
+    if (myMethodToDisplay === 'project') {
+      myLibraryFiltered = myLibrary.filter(
+        (task) => task.project === myProjectToDisplay
+      );
+    }
+    if (myMethodToDisplay === 'date') {
       if (myDateToDisplay === 'today') {
-        myLibraryFiltered = myLibrary.filter((task) => (isToday(task.dueDate)));
-      } if (myDateToDisplay === 'thisWeek') {
-        myLibraryFiltered = myLibrary.filter((task) => (isSameWeek(task.dueDate, new Date())));
+        myLibraryFiltered = myLibrary.filter((task) => isToday(task.dueDate));
+      }
+      if (myDateToDisplay === 'thisWeek') {
+        myLibraryFiltered = myLibrary.filter((task) =>
+          isSameWeek(task.dueDate, new Date())
+        );
       }
     }
   }
@@ -116,10 +120,12 @@ function displayTasks(method, project, date) {
     const taskOutputDueDate = document.createElement('div');
     taskOutputDueDate.classList.add('output--due--date');
     if (task.dueDate !== '') {
-      const dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted();
+      const dateToDisplay =
+        myLibrary[myLibrary.indexOf(task)].getDateFormatted();
       taskOutputDueDate.innerText = dateToDisplay;
     } else {
-      const dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted();
+      const dateToDisplay =
+        myLibrary[myLibrary.indexOf(task)].getDateFormatted();
       taskOutputDueDate.innerText = dateToDisplay;
     }
     taskDiv.appendChild(taskOutputDueDate);
@@ -259,11 +265,14 @@ function setProjectToDelete(target) {
 }
 
 function deleteTasksFromProject(projectDeleted) {
-  myLibrary.slice().reverse().forEach((task) => {
-    if (task.project === projectDeleted) {
-      myLibrary.splice([myLibrary.indexOf(task)], 1);
-    }
-  });
+  myLibrary
+    .slice()
+    .reverse()
+    .forEach((task) => {
+      if (task.project === projectDeleted) {
+        myLibrary.splice([myLibrary.indexOf(task)], 1);
+      }
+    });
   storeTasks();
 }
 
@@ -413,9 +422,4 @@ function eventListeners() {
   });
 }
 
-export {
-  displayTasks,
-  displayProjects,
-  eventListeners,
-  editTarget,
-};
+export { displayTasks, displayProjects, eventListeners, editTarget };

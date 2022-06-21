@@ -73,7 +73,11 @@ const PriorityInputs = (priority) => ({
   priority,
 });
 
-const myPriorityInputs = [PriorityInputs('Low'), PriorityInputs('Medium'), PriorityInputs('High')];
+const myPriorityInputs = [
+  PriorityInputs('Low'),
+  PriorityInputs('Medium'),
+  PriorityInputs('High'),
+];
 
 class PriorityInput {
   constructor(description) {

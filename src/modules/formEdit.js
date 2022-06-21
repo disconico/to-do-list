@@ -1,7 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import {
-  toDate,
-} from 'date-fns';
+import { toDate } from 'date-fns';
 import { myProjects } from './functions';
 // eslint-disable-next-line import/no-cycle
 import { editTarget } from './DOMevents';
@@ -82,7 +80,11 @@ const PriorityInputs = (priority) => ({
   priority,
 });
 
-const myPriorityInputs = [PriorityInputs('Low'), PriorityInputs('Medium'), PriorityInputs('High')];
+const myPriorityInputs = [
+  PriorityInputs('Low'),
+  PriorityInputs('Medium'),
+  PriorityInputs('High'),
+];
 
 class PriorityInput {
   constructor(description) {
