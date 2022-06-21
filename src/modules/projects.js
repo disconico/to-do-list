@@ -1,28 +1,24 @@
-// Task constructor : 
-const Projects = (name, tasks) => {
+// Task constructor :
+const Projects = (name, tasks) => ({
+  name,
+  tasks: [tasks],
 
-    return {
-        name: name,
-        tasks: [tasks],
+  // functions of project:
+  setName(newName) {
+    this.name = newName;
+  },
 
-        // functions of project:
-        setName(newName) {
-            this.name = newName
-        },
+  getName() {
+    return this.name;
+  },
 
-        getName() {
-            return this.name
-        },
+  setTasks(newTasks) {
+    this.tasks = newTasks;
+  },
 
-        setTasks(tasks) {
-            this.tasks = tasks
-        },
+  getTasks() {
+    return this.tasks;
+  },
+});
 
-        getTasks() {
-            return this.tasks
-        },
-    }
-}
-
-export { Projects }
-
+export default Projects;

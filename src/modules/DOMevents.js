@@ -1,429 +1,421 @@
 import {
-    addTaskToLibrary,
-    addTaskViaForm,
-    editTaskViaForm,
-    addNewProject,
-    filterTasksByProject,
-    setCurrentProject,
-    setcurrentProjectStatusFalse,
-    setcurrentProjectStatusTrue,
-    setcurrentDateStatusFalse,
-    setcurrentDateStatusTrue,
-    setCurrentDateFilter,
-    myLibrary,
-    myProjects,
-    currentProject,
-    currentDateFilter,
-    currentProjectStatus,
-    currentDateStatus,
-    storeTasks,
-    storeProjects,
-    restoreTasks,
-    restoreProjects
+  isToday, isSameWeek,
+} from 'date-fns';
+import {
+  addTaskViaForm,
+  editTaskViaForm,
+  addNewProject,
+  setCurrentProject,
+  setCurrentProjectStatusFalse,
+  setCurrentProjectStatusTrue,
+  setCurrentDateStatusFalse,
+  setCurrentDateStatusTrue,
+  setCurrentDateFilter,
+  storeTasks,
+  storeProjects,
+  myLibrary,
+  myProjects,
+  currentProject,
+  currentDateFilter,
+  currentProjectStatus,
+  currentDateStatus,
 }
-    from "./functions";
+  from './functions';
 
-import { createForm, deleteForm } from "./form";
-import { createProjectInput, deleteProjectInput } from "./newProjectInput";
-import { createEditForm, deleteEditForm } from "./formEdit";
-import { format, formatDistance, formatDistanceToNow, formatRelative, isToday, subDays, toDate, parseISO, parse, isSameWeek } from 'date-fns'
-import previousMonday from "date-fns/esm/fp/previousMonday/index.js";
+import { createForm, deleteForm } from './form';
+import { createProjectInput, deleteProjectInput } from './newProjectInput';
+// eslint-disable-next-line import/no-cycle
+import { createEditForm, deleteEditForm } from './formEdit';
 
 function displayTasks(method, project, date) {
-    const taskLibrary = document.querySelector('.task--library')
+  const taskLibrary = document.querySelector('.task--library');
 
-    // display library :
-    taskLibrary.innerHTML = ''
+  // display library :
+  taskLibrary.innerHTML = '';
 
-    const tasksToDo = document.createElement('div')
-    tasksToDo.classList.add('tasks--to--do')
-    taskLibrary.appendChild(tasksToDo)
+  const tasksToDo = document.createElement('div');
+  tasksToDo.classList.add('tasks--to--do');
+  taskLibrary.appendChild(tasksToDo);
 
-    const taskToDoTitle = document.createElement('h5')
-    taskToDoTitle.innerText = 'Tasks to do :'
-    tasksToDo.appendChild(taskToDoTitle)
+  const taskToDoTitle = document.createElement('h5');
+  taskToDoTitle.innerText = 'Tasks to do :';
+  tasksToDo.appendChild(taskToDoTitle);
 
-    const taskContainerToDo = document.createElement('div')
-    taskContainerToDo.classList.add('task--container')
-    tasksToDo.appendChild(taskContainerToDo)
+  const taskContainerToDo = document.createElement('div');
+  taskContainerToDo.classList.add('task--container');
+  tasksToDo.appendChild(taskContainerToDo);
 
+  const tasksDone = document.createElement('div');
+  tasksDone.classList.add('tasks--done');
+  taskLibrary.appendChild(tasksDone);
 
-    const tasksDone = document.createElement('div')
-    tasksDone.classList.add('tasks--done')
-    taskLibrary.appendChild(tasksDone)
+  const taskDoneTitle = document.createElement('h5');
+  taskDoneTitle.innerText = 'Tasks done :';
+  tasksDone.appendChild(taskDoneTitle);
 
-    const taskDoneTitle = document.createElement('h5')
-    taskDoneTitle.innerText = 'Tasks done :'
-    tasksDone.appendChild(taskDoneTitle)
+  const taskContainerDone = document.createElement('div');
+  taskContainerDone.classList.add('task--container');
+  tasksDone.appendChild(taskContainerDone);
 
-    const taskContainerDone = document.createElement('div')
-    taskContainerDone.classList.add('task--container')
-    tasksDone.appendChild(taskContainerDone)
+  myLibrary.forEach((task) => {
+    if (task.dueDate !== '') {
+      task.setDueDate(task.dueDate);
+    } else {
+      task.setDueDate(new Date());
+    }
+  });
 
-    myLibrary.forEach((task) => {
-        if (task.dueDate != '') {
-            task.setDueDate(task.dueDate)
-        } else {
-            task.setDueDate(new Date())
-        }
-    })
+  const myMethodToDisplay = method;
+  const myProjectToDisplay = project;
+  const myDateToDisplay = date;
+  let myLibraryFiltered = [];
 
-    let myMethodToDisplay = method
-    let myProjectToDisplay = project
-    let myDateToDisplay = date
-    let myLibraryFiltered = []
+  function checkMethod() {
+    if (myMethodToDisplay === '') {
+      myLibraryFiltered = myLibrary;
+    } if (myMethodToDisplay === 'project') {
+      myLibraryFiltered = myLibrary.filter((task) => task.project === myProjectToDisplay);
+    } if (myMethodToDisplay === 'date') {
+      if (myDateToDisplay === 'today') {
+        myLibraryFiltered = myLibrary.filter((task) => (isToday(task.dueDate)));
+      } if (myDateToDisplay === 'thisWeek') {
+        myLibraryFiltered = myLibrary.filter((task) => (isSameWeek(task.dueDate, new Date())));
+      }
+    }
+  }
 
-    function checkMethod() {
-        if (myMethodToDisplay === '') {
-            return myLibraryFiltered = myLibrary
+  checkMethod();
 
-        } else if (myMethodToDisplay === 'project') {
-            return myLibraryFiltered = myLibrary.filter((task) => task.project === myProjectToDisplay
-            )
-        } else if (myMethodToDisplay === 'date') {
-            if (myDateToDisplay === 'today') {
-                return myLibraryFiltered = myLibrary.filter((task) => (isToday(task.dueDate)))
-            } else if (myDateToDisplay === 'thisWeek') {
-                return myLibraryFiltered = myLibrary.filter((task) => (isSameWeek(task.dueDate, new Date())))
-            }
-        }
+  // For each task :
+  myLibraryFiltered.forEach((task) => {
+    const taskDiv = document.createElement('div');
+    taskDiv.classList.add('task--div');
+
+    function checkStatusDiv() {
+      if (task.status === 'false') {
+        taskContainerToDo.appendChild(taskDiv);
+      } else if (task.status === 'true') {
+        taskContainerDone.appendChild(taskDiv);
+      }
     }
 
-    checkMethod()
+    checkStatusDiv();
 
-    //For each task :
-    myLibraryFiltered.forEach((task) => {
+    taskDiv.setAttribute('id', myLibrary.indexOf(task));
 
-        let taskDiv = document.createElement('div')
-        taskDiv.classList.add('task--div')
+    const taskOutputName = document.createElement('div');
+    taskOutputName.classList.add('output--name');
+    taskOutputName.innerText = task.title;
+    taskDiv.appendChild(taskOutputName);
 
-        function checkStatusDiv() {
-            if (task.status === 'false') {
-                taskContainerToDo.appendChild(taskDiv)
-            } else if (task.status === 'true') {
-                taskContainerDone.appendChild(taskDiv)
-            }
-        }
+    const taskOutputDescription = document.createElement('div');
+    taskOutputDescription.classList.add('output--description');
+    taskOutputDescription.innerText = task.description;
+    taskDiv.appendChild(taskOutputDescription);
 
-        checkStatusDiv()
+    const taskOutputDueDate = document.createElement('div');
+    taskOutputDueDate.classList.add('output--due--date');
+    if (task.dueDate !== '') {
+      const dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted();
+      taskOutputDueDate.innerText = dateToDisplay;
+    } else {
+      const dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted();
+      taskOutputDueDate.innerText = dateToDisplay;
+    }
+    taskDiv.appendChild(taskOutputDueDate);
 
-        taskDiv.setAttribute('id', myLibrary.indexOf(task))
+    const taskOutputProject = document.createElement('div');
+    taskOutputProject.classList.add('output--project');
+    taskOutputProject.innerText = task.project;
+    taskDiv.appendChild(taskOutputProject);
 
-        let taskOutputName = document.createElement('div')
-        taskOutputName.classList.add('output--name')
-        taskOutputName.innerText = task.title
-        taskDiv.appendChild(taskOutputName)
+    const taskOutputPriority = document.createElement('div');
+    taskOutputPriority.classList.add('output--priority');
+    taskOutputPriority.classList.add(task.priority);
+    taskOutputPriority.innerText = task.priority;
+    taskDiv.appendChild(taskOutputPriority);
 
-        let taskOutputDescription = document.createElement('div')
-        taskOutputDescription.classList.add('output--description')
-        taskOutputDescription.innerText = task.description
-        taskDiv.appendChild(taskOutputDescription)
+    const taskOutputStatusDiv = document.createElement('div');
+    taskOutputStatusDiv.classList.add('output--status');
+    taskDiv.appendChild(taskOutputStatusDiv);
 
-        let taskOutputDueDate = document.createElement('div')
-        taskOutputDueDate.classList.add('output--due--date')
-        if (task.dueDate != '') {
-            let dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted()
-            taskOutputDueDate.innerText = dateToDisplay
-        } else {
-            let dateToDisplay = myLibrary[myLibrary.indexOf(task)].getDateFormatted()
-            taskOutputDueDate.innerText = dateToDisplay
-        }
-        taskDiv.appendChild(taskOutputDueDate)
+    const taskOutputStatus = document.createElement('label');
+    taskOutputStatus.classList.add('switch');
 
-        let taskOutputProject = document.createElement('div')
-        taskOutputProject.classList.add('output--project')
-        taskOutputProject.innerText = task.project
-        taskDiv.appendChild(taskOutputProject)
+    function checkStatusText() {
+      if (task.status === 'false') {
+        taskOutputStatus.innerText = 'Mark as done :  ';
+      } else if (task.status === 'true') {
+        taskOutputStatus.innerText = 'Mark as to do :  ';
+      }
+    }
 
-        let taskOutputPriority = document.createElement('div')
-        taskOutputPriority.classList.add('output--priority')
-        taskOutputPriority.classList.add(task.priority)
-        taskOutputPriority.innerText = task.priority
-        taskDiv.appendChild(taskOutputPriority)
+    checkStatusText();
 
-        let taskOutputStatusDiv = document.createElement('div')
-        taskOutputStatusDiv.classList.add('output--status')
-        taskDiv.appendChild(taskOutputStatusDiv)
+    taskOutputStatusDiv.appendChild(taskOutputStatus);
 
-        let taskOutputStatus = document.createElement('label')
-        taskOutputStatus.classList.add('switch')
+    const taskStatusBtn = document.createElement('input');
+    taskStatusBtn.type = 'checkbox';
+    taskStatusBtn.classList.add('checkbox');
+    taskStatusBtn.setAttribute('id', myLibrary.indexOf(task));
+    taskOutputStatus.appendChild(taskStatusBtn);
 
-        function checkStatusText() {
-            if (task.status === 'false') {
-                taskOutputStatus.innerText = 'Mark as done :  '
-            } else if (task.status === 'true') {
-                taskOutputStatus.innerText = 'Mark as to do :  '
-            }
-        }
+    function checkStatus() {
+      if (task.status === 'false') {
+        taskStatusBtn.checked = false;
+      } else if (task.status === 'true') {
+        taskStatusBtn.checked = true;
+      }
+    }
+    checkStatus();
 
-        checkStatusText()
+    const taskSlider = document.createElement('span');
+    taskSlider.classList.add('slider');
+    taskSlider.classList.add('round');
+    taskOutputStatus.appendChild(taskSlider);
 
-        taskOutputStatusDiv.appendChild(taskOutputStatus)
+    const actionBtn = document.createElement('div');
+    actionBtn.classList.add('action--buttons');
+    taskDiv.appendChild(actionBtn);
 
-        let taskStatusBtn = document.createElement('input')
-        taskStatusBtn.type = 'checkbox'
-        taskStatusBtn.classList.add('checkbox')
-        taskStatusBtn.setAttribute('id', myLibrary.indexOf(task))
-        taskOutputStatus.appendChild(taskStatusBtn)
+    const deleteBtnDiv = document.createElement('div');
+    deleteBtnDiv.classList.add('output--delete');
+    actionBtn.appendChild(deleteBtnDiv);
 
-        function checkStatus() {
-            if (task.status === 'false') {
-                return
-            } else if (task.status === 'true') {
-                taskStatusBtn.checked = true
-            }
-        }
-        checkStatus()
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.classList.add('delete--button');
+    deleteBtn.setAttribute('id', myLibrary.indexOf(task));
+    deleteBtnDiv.appendChild(deleteBtn);
 
-        let taskSlider = document.createElement('span')
-        taskSlider.classList.add('slider')
-        taskSlider.classList.add('round')
-        taskOutputStatus.appendChild(taskSlider)
+    const editBtnDiv = document.createElement('div');
+    editBtnDiv.classList.add('output--edit');
+    actionBtn.appendChild(editBtnDiv);
 
-        let actionBtn = document.createElement('div')
-        actionBtn.classList.add('action--buttons')
-        taskDiv.appendChild(actionBtn)
-
-        let deleteBtnDiv = document.createElement('div')
-        deleteBtnDiv.classList.add('output--delete')
-        actionBtn.appendChild(deleteBtnDiv)
-
-        let deleteBtn = document.createElement('button')
-        deleteBtn.type = 'button'
-        deleteBtn.classList.add('delete--button')
-        deleteBtn.setAttribute('id', myLibrary.indexOf(task))
-        deleteBtnDiv.appendChild(deleteBtn)
-
-        let editBtnDiv = document.createElement('div')
-        editBtnDiv.classList.add('output--edit')
-        actionBtn.appendChild(editBtnDiv)
-
-        let editBtn = document.createElement('button')
-        editBtn.type = 'button'
-        editBtn.classList.add('edit--button')
-        editBtn.setAttribute('id', myLibrary.indexOf(task))
-        editBtnDiv.appendChild(editBtn)
-    })
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.classList.add('edit--button');
+    editBtn.setAttribute('id', myLibrary.indexOf(task));
+    editBtnDiv.appendChild(editBtn);
+  });
 }
 
 function displayProjects() {
-    const projectLibrary = document.querySelector('.project--list')
+  const projectLibrary = document.querySelector('.project--list');
 
-    // display library :
-    projectLibrary.innerHTML = ''
+  // display library :
+  projectLibrary.innerHTML = '';
 
-    const projectListTitle = document.createElement('p')
-    projectListTitle.innerText = 'Projects'
-    projectListTitle.classList.add('project--list--title')
-    projectLibrary.appendChild(projectListTitle)
+  const projectListTitle = document.createElement('p');
+  projectListTitle.innerText = 'Projects';
+  projectListTitle.classList.add('project--list--title');
+  projectLibrary.appendChild(projectListTitle);
 
-    //For each project :
-    myProjects.forEach((project) => {
+  // For each project :
+  myProjects.forEach((project) => {
+    const projectDiv = document.createElement('div');
+    projectDiv.classList.add('project--div');
+    projectLibrary.appendChild(projectDiv);
 
-        let projectDiv = document.createElement('div')
-        projectDiv.classList.add('project--div')
-        projectLibrary.appendChild(projectDiv)
+    const projectBtn = document.createElement('button');
+    projectBtn.classList.add('project--list-btn');
+    projectBtn.id = project.name;
+    projectBtn.innerText = project.name;
 
-        let projectBtn = document.createElement('button')
-        projectBtn.classList.add('project--list-btn')
-        projectBtn.id = project.name
-        projectBtn.innerText = project.name
+    const projectRemoveBtn = document.createElement('button');
+    projectRemoveBtn.classList.add('project--remove--btn');
+    projectRemoveBtn.id = myProjects.indexOf(project);
 
-        let projectRemoveBtn = document.createElement('button')
-        projectRemoveBtn.classList.add('project--remove--btn')
-        projectRemoveBtn.id = myProjects.indexOf(project)
+    projectDiv.appendChild(projectBtn);
+    projectDiv.appendChild(projectRemoveBtn);
+  });
 
-        projectDiv.appendChild(projectBtn)
-        projectDiv.appendChild(projectRemoveBtn)
-    })
-
-    const newProjectBtn = document.createElement('button')
-    newProjectBtn.type = 'button'
-    newProjectBtn.classList.add('new--project--button')
-    newProjectBtn.innerText = 'Add new project'
-    projectLibrary.appendChild(newProjectBtn)
-
+  const newProjectBtn = document.createElement('button');
+  newProjectBtn.type = 'button';
+  newProjectBtn.classList.add('new--project--button');
+  newProjectBtn.innerText = 'Add new project';
+  projectLibrary.appendChild(newProjectBtn);
 }
 
-function checkcurrentProjectStatusAndDisplayTasks() {
-    if (currentProjectStatus === false && currentDateStatus === false) {
-        displayTasks('')
-    } else if (currentProjectStatus === true) {
-        displayTasks('project', currentProject, '')
-    } else if (currentDateStatus === true) {
-        displayTasks('date', '', currentDateFilter)
-    }
+function checkCurrentProjectStatusAndDisplayTasks() {
+  if (currentProjectStatus === false && currentDateStatus === false) {
+    displayTasks('');
+  } else if (currentProjectStatus === true) {
+    displayTasks('project', currentProject, '');
+  } else if (currentDateStatus === true) {
+    displayTasks('date', '', currentDateFilter);
+  }
 }
 
-let editTarget = {}
+// eslint-disable-next-line import/no-mutable-exports
+let editTarget = {};
 function setEditTarget(newEditTarget) {
-    return editTarget = newEditTarget
+  editTarget = newEditTarget;
 }
 
-let myProjectToDelete = ''
+let myProjectToDelete = '';
 function setProjectToDelete(target) {
-    return myProjectToDelete = target
+  myProjectToDelete = target;
 }
 
 function deleteTasksFromProject(projectDeleted) {
-    myLibrary.slice().reverse().forEach((task) => {
-        if (task.project === projectDeleted) {
-            myLibrary.splice([myLibrary.indexOf(task)], 1)
-        }
-    })
-    storeTasks()
+  myLibrary.slice().reverse().forEach((task) => {
+    if (task.project === projectDeleted) {
+      myLibrary.splice([myLibrary.indexOf(task)], 1);
+    }
+  });
+  storeTasks();
 }
 
 function eventListeners() {
-    const mainContent = document.querySelector('.main--content')
-    const sideBar = document.querySelector('.sideBar')
+  const mainContent = document.querySelector('.main--content');
+  const sideBar = document.querySelector('.sideBar');
 
-    // Add task button
-    const addTaskBtn = document.querySelector('.main--button')
-    addTaskBtn.addEventListener('click', createForm)
+  // Add task button
+  const addTaskBtn = document.querySelector('.main--button');
+  addTaskBtn.addEventListener('click', createForm);
 
-    // Adding new task
-    mainContent.addEventListener('click', (e) => {
-        if (e.target.classList.contains('submit--button')) {
-            addTaskViaForm()
-            deleteForm()
-            checkcurrentProjectStatusAndDisplayTasks()
-        }
-    })
+  // Adding new task
+  mainContent.addEventListener('click', (e) => {
+    if (e.target.classList.contains('submit--button')) {
+      addTaskViaForm();
+      deleteForm();
+      checkCurrentProjectStatusAndDisplayTasks();
+    }
+  });
 
-    // Cancelling new task
-    mainContent.addEventListener('click', (e) => {
-        if (e.target.classList.contains('cancel--button')) {
-            deleteForm()
-            checkcurrentProjectStatusAndDisplayTasks()
-        }
-    })
+  // Cancelling new task
+  mainContent.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cancel--button')) {
+      deleteForm();
+      checkCurrentProjectStatusAndDisplayTasks();
+    }
+  });
 
-    // Switching task status
-    mainContent.addEventListener('click', (e) => {
-        if (e.target.classList.contains('checkbox')) {
-            myLibrary[e.target.id].toggleStatus()
-            checkcurrentProjectStatusAndDisplayTasks()
-            storeTasks()
-        }
-    })
+  // Switching task status
+  mainContent.addEventListener('click', (e) => {
+    if (e.target.classList.contains('checkbox')) {
+      myLibrary[e.target.id].toggleStatus();
+      checkCurrentProjectStatusAndDisplayTasks();
+      storeTasks();
+    }
+  });
 
-    // Delete task
-    mainContent.addEventListener('click', (e) => {
-        if (e.target.classList.contains('delete--button')) {
-            myLibrary.splice(e.target.id, 1)
-            checkcurrentProjectStatusAndDisplayTasks()
-            storeTasks()
-        }
-    })
+  // Delete task
+  mainContent.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete--button')) {
+      myLibrary.splice(e.target.id, 1);
+      checkCurrentProjectStatusAndDisplayTasks();
+      storeTasks();
+    }
+  });
 
-    // Edit button on task
-    mainContent.addEventListener('click', (e) => {
-        if (e.target.classList.contains('edit--button')) {
-            setEditTarget(myLibrary[e.target.id])
-            createEditForm(myLibrary[e.target.id])
-        }
-    })
+  // Edit button on task
+  mainContent.addEventListener('click', (e) => {
+    if (e.target.classList.contains('edit--button')) {
+      setEditTarget(myLibrary[e.target.id]);
+      createEditForm(myLibrary[e.target.id]);
+    }
+  });
 
-    // Triggered when validating task edit
-    mainContent.addEventListener('click', (e) => {
-        if (e.target.classList.contains('submit--edit--button')) {
-            editTaskViaForm(editTarget)
-            deleteEditForm()
-            checkcurrentProjectStatusAndDisplayTasks()
-        }
-    })
+  // Triggered when validating task edit
+  mainContent.addEventListener('click', (e) => {
+    if (e.target.classList.contains('submit--edit--button')) {
+      editTaskViaForm(editTarget);
+      deleteEditForm();
+      checkCurrentProjectStatusAndDisplayTasks();
+    }
+  });
 
-    // Triggered when cancelling task edit
-    mainContent.addEventListener('click', (e) => {
-        if (e.target.classList.contains('cancel--edit--button')) {
-            deleteEditForm()
-            checkcurrentProjectStatusAndDisplayTasks()
-        }
-    })
+  // Triggered when cancelling task edit
+  mainContent.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cancel--edit--button')) {
+      deleteEditForm();
+      checkCurrentProjectStatusAndDisplayTasks();
+    }
+  });
 
-    // Add new project button
-    sideBar.addEventListener('click', (e) => {
-        if (e.target.classList.contains('new--project--button')) {
-            createProjectInput()
-        }
-    })
+  // Add new project button
+  sideBar.addEventListener('click', (e) => {
+    if (e.target.classList.contains('new--project--button')) {
+      createProjectInput();
+    }
+  });
 
-    // Triggered when adding new project via button
-    sideBar.addEventListener('click', (e) => {
-        if (e.target.classList.contains('project--validate--btn')) {
-            addNewProject()
-            deleteProjectInput()
-            displayProjects()
-            setcurrentDateStatusFalse()
-            setcurrentProjectStatusTrue()
-            checkcurrentProjectStatusAndDisplayTasks()
-        }
-    })
+  // Triggered when adding new project via button
+  sideBar.addEventListener('click', (e) => {
+    if (e.target.classList.contains('project--validate--btn')) {
+      addNewProject();
+      deleteProjectInput();
+      displayProjects();
+      setCurrentDateStatusFalse();
+      setCurrentProjectStatusTrue();
+      checkCurrentProjectStatusAndDisplayTasks();
+    }
+  });
 
-    //Canceling input 
-    sideBar.addEventListener('click', (e) => {
-        if (e.target.classList.contains('project--cancel--btn')) {
-            deleteProjectInput()
-        }
-    })
+  // Canceling input
+  sideBar.addEventListener('click', (e) => {
+    if (e.target.classList.contains('project--cancel--btn')) {
+      deleteProjectInput();
+    }
+  });
 
-    //Clicking existing project 
-    sideBar.addEventListener('click', (e) => {
-        if (e.target.classList.contains('project--list-btn')) {
-            setcurrentDateStatusFalse()
-            setcurrentProjectStatusTrue()
-            setCurrentProject(e.target.id)
-            displayTasks('project', currentProject)
-        }
-    })
+  // Clicking existing project
+  sideBar.addEventListener('click', (e) => {
+    if (e.target.classList.contains('project--list-btn')) {
+      setCurrentDateStatusFalse();
+      setCurrentProjectStatusTrue();
+      setCurrentProject(e.target.id);
+      displayTasks('project', currentProject);
+    }
+  });
 
-    // Triggered when clicking delete button project
-    sideBar.addEventListener('click', (e) => {
-        if (e.target.classList.contains('project--remove--btn')) {
-            setProjectToDelete(myProjects[e.target.id].name)
-            myProjects.splice(e.target.id, 1)
-            deleteTasksFromProject(myProjectToDelete)
-            checkcurrentProjectStatusAndDisplayTasks()
-            displayProjects()
-            storeProjects()
-        }
-    })
+  // Triggered when clicking delete button project
+  sideBar.addEventListener('click', (e) => {
+    if (e.target.classList.contains('project--remove--btn')) {
+      setProjectToDelete(myProjects[e.target.id].name);
+      myProjects.splice(e.target.id, 1);
+      deleteTasksFromProject(myProjectToDelete);
+      checkCurrentProjectStatusAndDisplayTasks();
+      displayProjects();
+      storeProjects();
+    }
+  });
 
-    //Inbox button
-    sideBar.addEventListener('click', (e) => {
-        if (e.target.id === 'inbox') {
-            setcurrentProjectStatusFalse()
-            setcurrentDateStatusFalse()
-            displayTasks('')
-        }
-    })
+  // Inbox button
+  sideBar.addEventListener('click', (e) => {
+    if (e.target.id === 'inbox') {
+      setCurrentProjectStatusFalse();
+      setCurrentDateStatusFalse();
+      displayTasks('');
+    }
+  });
 
-    //Today button
-    sideBar.addEventListener('click', (e) => {
-        if (e.target.id === 'today') {
-            setcurrentDateStatusTrue()
-            setcurrentProjectStatusFalse()
-            setCurrentDateFilter(e.target.id)
-            displayTasks('date', '', currentDateFilter)
-        }
-    })
+  // Today button
+  sideBar.addEventListener('click', (e) => {
+    if (e.target.id === 'today') {
+      setCurrentDateStatusTrue();
+      setCurrentProjectStatusFalse();
+      setCurrentDateFilter(e.target.id);
+      displayTasks('date', '', currentDateFilter);
+    }
+  });
 
-    //This week button
-    sideBar.addEventListener('click', (e) => {
-        if (e.target.id === 'this--week') {
-            setcurrentDateStatusTrue()
-            setcurrentProjectStatusFalse()
-            setCurrentDateFilter('thisWeek')
-            displayTasks('date', '', currentDateFilter)
-        }
-    })
-
+  // This week button
+  sideBar.addEventListener('click', (e) => {
+    if (e.target.id === 'this--week') {
+      setCurrentDateStatusTrue();
+      setCurrentProjectStatusFalse();
+      setCurrentDateFilter('thisWeek');
+      displayTasks('date', '', currentDateFilter);
+    }
+  });
 }
 
 export {
-    displayTasks,
-    displayProjects,
-    eventListeners,
-    editTarget
-}
+  displayTasks,
+  displayProjects,
+  eventListeners,
+  editTarget,
+};
